@@ -111,7 +111,7 @@ func Combat(joueur *Dresseur) {
 				Attaquer(ennemi, pokemonJoueur)
 			}
 		case 2:
-			// Logique pour utiliser une potion
+			TakePot(&joueur.Inventaire[0], joueur) // Logique pour utiliser une potion
 		case 3:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
 			return
