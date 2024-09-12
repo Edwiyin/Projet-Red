@@ -15,6 +15,8 @@ type Pokemon struct {
 	Attaque   int
 }
 
+
+
 type Item struct {
 	Nom      string
 	Quantite int
