@@ -111,7 +111,13 @@ func Combat(joueur *Dresseur) {
 				Attaquer(ennemi, pokemonJoueur)
 			}
 		case 2:
-			// Logique pour utiliser une potion
+			for i, item := range joueur.Inventaire {
+				if item.Nom == "Potion" {
+					TakePot(&joueur.Inventaire[i], joueur)
+					Attaquer(ennemi, pokemonJoueur)
+					break
+				}
+			}
 		case 3:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
 			return
@@ -121,6 +127,20 @@ func Combat(joueur *Dresseur) {
 	}
 
 	if EstVivant(pokemonJoueur) {
+		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
+		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
+		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
+		fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
+		fmt.Println(Jaune("4. Vibrannif (Type: Eau)"))
+		fmt.Println(Jaune("5. Roucool (Type: Vol)"))
+		fmt.Println(Jaune("6. Rattata (Type: Normal)"))
+		fmt.Println(Jaune("7. Aspicot (Type: Insecte)"))
+
+		var choixPokemon string
+		fmt.Print(Vert("Entrez votre choix (1-7) : "))
+		fmt.Scanln(&choixPokemon)
+		choixPokemonFunc(choixPokemon, joueur)
+
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))

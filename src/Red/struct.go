@@ -5,7 +5,6 @@ import (
 	"math/rand"
 )
 
-// Structures
 type Pokemon struct {
 	Nom       string
 	Type      string
@@ -28,7 +27,6 @@ type Dresseur struct {
 	Inventaire []Item
 }
 
-// Fonctions associées aux Pokémon
 func (p *Pokemon) EstVivant() bool {
 	return p.PVActuels > 0
 }
