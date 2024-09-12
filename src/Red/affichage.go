@@ -34,7 +34,7 @@ func AfficherLigneMenu(texte string, largeur int) {
 	fmt.Printf("%s║ %s%s ║%s\n", Jaune("║"), Jaune(texte), strings.Repeat(" ", espaces), Jaune("║"))
 }
 
-func DisplayInfo() {
+func DisplayInfo(joueur Dresseur) {
 	fmt.Println(Jaune("\nInformations du dresseur :"))
 	fmt.Printf(Jaune("Nom : %s\n"), joueur.Nom)
 	fmt.Println(Jaune("\nÉquipe Pokémon :"))

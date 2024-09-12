@@ -217,7 +217,7 @@ func menuPrincipal() {
 			if joueur.Nom == "" {
 				fmt.Println(gokemon.Jaune("\nVeuillez d'abord créer votre dresseur."))
 			} else {
-				gokemon.DisplayInfo()
+				gokemon.DisplayInfo(joueur)
 			}
 		case "3":
 			accessInventory()
