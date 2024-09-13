@@ -16,7 +16,7 @@ func (p *Pokemon) GainExperience(exp int) bool {
 }
 
 func (p *Pokemon) Attaquer(cible *Pokemon) int {
-	damage := rand.Intn(10) + 1 
+	damage := rand.Intn(10) + 1
 	cible.PVActuels -= damage
 	if cible.PVActuels < 0 {
 		cible.PVActuels = 0
@@ -30,16 +30,12 @@ func (p *Pokemon) EstVivant() bool {
 
 type PokemonType string
 
-const (
-	
-)
-
+const ()
 
 type Item struct {
 	Nom      string
 	Quantite int
 }
-
 
 func Combat(joueur *Dresseur) {
 	if len(joueur.Equipe) == 0 {
@@ -91,7 +87,6 @@ func Combat(joueur *Dresseur) {
 		}
 	}
 
-<<<<<<< HEAD
 	if EstVivant(pokemonJoueur) {
 		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
 		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
@@ -116,22 +111,23 @@ func Combat(joueur *Dresseur) {
 		choixPokemonFunc(choixPokemon, joueur)
 
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
-=======
-	if pokemonJoueur.EstVivant() {
-		expGained := ennemi.Niveau * 10
-		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
-		if pokemonJoueur.GainExperience(expGained) {
-			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
+
+		if pokemonJoueur.EstVivant() {
+			expGained := ennemi.Niveau * 10
+			fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
+			if pokemonJoueur.GainExperience(expGained) {
+				fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
+			}
+
+		} else {
+			fmt.Println(Jaune("Vous avez perdu le combat..."))
 		}
->>>>>>> 54389c1d0dee910e79e8c4a7cbff2eece45d7b51
-	} else {
-		fmt.Println(Jaune("Vous avez perdu le combat..."))
 	}
 }
 
 func GenerateWildPokemon() Pokemon {
 	wildPokemons := []struct {
-		name string
+		name        string
 		pokemonType PokemonType
 	}{
 		{"Rattata", Normal},
@@ -144,11 +140,11 @@ func GenerateWildPokemon() Pokemon {
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
 	level := rand.Intn(5) + 1
 	return Pokemon{
-		Nom:       randomPokemon.name,
-		PVActuels: level * 10,
-		PVMax:     level * 10,
-		Niveau:    level,
-		Type:      randomPokemon.pokemonType,
+		Nom:        randomPokemon.name,
+		PVActuels:  level * 10,
+		PVMax:      level * 10,
+		Niveau:     level,
+		Type:       randomPokemon.pokemonType,
 		Experience: 0,
 	}
 }
