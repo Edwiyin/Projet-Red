@@ -15,11 +15,9 @@ func init() {
 		Inventaire: []gokemon.InventoryItem{
 			{Nom: "Potion", Quantite: 3},
 			{Nom: "Pokéball", Quantite: 5},
-			{Nom: "Baie", Quantite: 2},
 		},
 	}
 }
-
 func main() {
 	rand.Seed(time.Now().UnixNano())
 

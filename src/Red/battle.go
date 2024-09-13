@@ -3,6 +3,7 @@ package gokemon
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 func (p *Pokemon) GainExperience(exp int) bool {
@@ -88,41 +89,18 @@ func Combat(joueur *Dresseur) {
 	}
 
 	if pokemonJoueur.EstVivant() {
-		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
-		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
-		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
-		fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
-		fmt.Println(Jaune("4. Vibrannif (Type: Eau)"))
-		fmt.Println(Jaune("5. Roucool (Type: Vol)"))
-		fmt.Println(Jaune("6. Rattata (Type: Normal)"))
-		fmt.Println(Jaune("7. Aspicot (Type: Insecte)"))
-
-		var choixPokemon string
-		fmt.Print(Vert("Entrez votre choix (1-7) : "))
-		fmt.Scanln(&choixPokemon)
-
-		for choixPokemon < "1" || choixPokemon > "7" {
-			fmt.Println(Vert("Choix invalide. Veuillez choisir entre 1 et 7."))
-			fmt.Print(Vert("Entrez votre choix (1-7) : "))
-			fmt.Scanln(&choixPokemon)
-		}
-
-		choixPokemonFunc(choixPokemon)
-
-		fmt.Println(Jaune("Vous avez gagné le combat!"))
-
-		if pokemonJoueur.EstVivant() {
 			expGained := ennemi.Niveau * 10
 			fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
+			time.Sleep(5 * time.Second)
 			if pokemonJoueur.GainExperience(expGained) {
 				fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
 			}
 
 		} else {
 			fmt.Println(Jaune("Vous avez perdu le combat..."))
+			time.Sleep(5 * time.Second)
 		}
 	}
-}
 
 func GenerateWildPokemon() Pokemon {
 	wildPokemons := []struct {
@@ -134,6 +112,19 @@ func GenerateWildPokemon() Pokemon {
 		{"Caterpie", Bug},
 		{"Weedle", Bug},
 		{"Pikachu", Electric},
+		{"Eevee", Normal},
+		{"Vulpix", Fire},
+		{"Jigglypuff", Normal},
+		{"Zubat", Flying},
+		{"Oddish", Grass},
+		{"Paras", Bug},
+		{"Venonat", Bug},
+		{"Meowth", Normal},
+		{"Psyduck", Water},
+		{"Mankey", Normal},
+		{"Growlithe", Fire},
+		{"Poliwag", Water},
+
 	}
 
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
@@ -174,9 +165,11 @@ func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 			if item.Quantite > 0 {
 				joueur.Inventaire[i].Quantite--
 				catchChance := float64(pokemon.PVMax-pokemon.PVActuels) / float64(pokemon.PVMax)
+				fmt.Printf(Jaune("\nVous lancez une Pokéball... Chance de capture : %.2f\n"), catchChance)
 				if rand.Float64() < catchChance {
 					joueur.Equipe = append(joueur.Equipe, *pokemon)
 					fmt.Printf(Jaune("\nFélicitations! Vous avez capturé %s!\n"), pokemon.Nom)
+					time.Sleep(5 * time.Second)
 					return true
 				} else {
 					fmt.Println(Jaune("\nLe Pokémon s'est échappé de la Pokéball!"))

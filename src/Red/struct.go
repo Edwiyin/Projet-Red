@@ -12,6 +12,7 @@ const (
 	Electric PokemonType = "Electric"
 	Flying   PokemonType = "Flying"
 	Bug      PokemonType = "Bug"
+
 )
 
 var typeEffectiveness = map[PokemonType]map[PokemonType]float64{
@@ -22,6 +23,8 @@ var typeEffectiveness = map[PokemonType]map[PokemonType]float64{
 	Electric: {Normal: 1, Fire: 1, Water: 2, Grass: 0.5, Electric: 0.5, Flying: 2, Bug: 1},
 	Flying:   {Normal: 1, Fire: 1, Water: 1, Grass: 2, Electric: 0.5, Flying: 1, Bug: 2},
 	Bug:      {Normal: 1, Fire: 0.5, Water: 1, Grass: 2, Electric: 1, Flying: 0.5, Bug: 1},
+
+
 }
 
 type Pokemon struct {
