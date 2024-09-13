@@ -6,6 +6,27 @@ import (
 	"strings"
 )
 
+func TakePot(item *Item, joueur *Dresseur) {
+	if item.Quantite > 0 {
+		for i := range joueur.Equipe {
+			if joueur.Equipe[i].PVActuels < joueur.Equipe[i].PVMax {
+				joueur.Equipe[i].PVActuels += 20
+				if joueur.Equipe[i].PVActuels > joueur.Equipe[i].PVMax {
+					joueur.Equipe[i].PVActuels = joueur.Equipe[i].PVMax
+				}
+				item.Quantite--
+				fmt.Printf(Jaune("\nVous avez utilisé une Potion sur %s. PV actuels: %d/%d\n"), joueur.Equipe[i].Nom, joueur.Equipe[i].PVActuels, joueur.Equipe[i].PVMax)
+				return
+			}
+		}
+		fmt.Println(Jaune("\nTous vos Pokémon ont déjà leurs PV au maximum."))
+	} else {
+		fmt.Println(Jaune("\nVous n'avez plus de Potions."))
+	}
+}
+
+
+
 func choixPokemonFunc(choixPokemon string) Pokemon {
 	switch choixPokemon {
 	case "1":
@@ -57,8 +78,45 @@ func ViewTeam(joueur *Dresseur) {
 }
 
 func AccessInventory(joueur *Dresseur) {
+	for {
+		fmt.Print("\033[2J")
+		fmt.Print("\033[H")
+		AfficherTitre()
 
-	fmt.Println(Jaune("\nAccès à l'inventaire..."))
+		largeur := 50
+		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu("        INVENTAIRE", largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+
+		for i, item := range joueur.Inventaire {
+			AfficherLigneMenu(fmt.Sprintf("%d. %s (x%d)", i+1, item.Nom, item.Quantite), largeur)
+		}
+		AfficherLigneMenu(fmt.Sprintf("%d. Retour au menu principal", len(joueur.Inventaire)+1), largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
+
+		fmt.Print(Vert("\nEntrez votre choix : "))
+		var choix int
+		fmt.Scanln(&choix)
+
+		if choix == len(joueur.Inventaire)+1 {
+			return
+		} else if choix > 0 && choix <= len(joueur.Inventaire) {
+			item := &joueur.Inventaire[choix-1]
+			if item.Nom == "Potion" {
+				TakePot((*Item)(item), joueur)
+			} else {
+				fmt.Printf(Jaune("\nVous ne pouvez pas utiliser %s pour le moment.\n"), item.Nom)
+			}
+		} else {
+			fmt.Println(Jaune("\nChoix invalide. Veuillez réessayer."))
+		}
+
+		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
+		fmt.Scanln()
+	}
 }
 
 func MenuPrincipal(joueur *Dresseur) {

@@ -101,7 +101,6 @@ func Combat(joueur *Dresseur) {
 		fmt.Print(Vert("Entrez votre choix (1-7) : "))
 		fmt.Scanln(&choixPokemon)
 
-		// Vérifier si le choix est valide
 		for choixPokemon < "1" || choixPokemon > "7" {
 			fmt.Println(Vert("Choix invalide. Veuillez choisir entre 1 et 7."))
 			fmt.Print(Vert("Entrez votre choix (1-7) : "))
