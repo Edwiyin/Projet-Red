@@ -87,7 +87,7 @@ func Combat(joueur *Dresseur) {
 		}
 	}
 
-	if EstVivant(pokemonJoueur) {
+	if pokemonJoueur.EstVivant() {
 		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
 		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
 		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
@@ -101,14 +101,13 @@ func Combat(joueur *Dresseur) {
 		fmt.Print(Vert("Entrez votre choix (1-7) : "))
 		fmt.Scanln(&choixPokemon)
 
-		// Vérifier si le choix est valide
 		for choixPokemon < "1" || choixPokemon > "7" {
 			fmt.Println(Vert("Choix invalide. Veuillez choisir entre 1 et 7."))
 			fmt.Print(Vert("Entrez votre choix (1-7) : "))
 			fmt.Scanln(&choixPokemon)
 		}
 
-		choixPokemonFunc(choixPokemon, joueur)
+		choixPokemonFunc(choixPokemon)
 
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
 
