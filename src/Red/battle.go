@@ -135,12 +135,20 @@ func Combat(joueur *Dresseur) {
 		fmt.Println(Jaune("5. Roucool (Type: Vol)"))
 		fmt.Println(Jaune("6. Rattata (Type: Normal)"))
 		fmt.Println(Jaune("7. Aspicot (Type: Insecte)"))
-
+	
 		var choixPokemon string
 		fmt.Print(Vert("Entrez votre choix (1-7) : "))
 		fmt.Scanln(&choixPokemon)
+	
+		// Vérifier si le choix est valide
+		for choixPokemon < "1" || choixPokemon > "7" {
+			fmt.Println(Vert("Choix invalide. Veuillez choisir entre 1 et 7."))
+			fmt.Print(Vert("Entrez votre choix (1-7) : "))
+			fmt.Scanln(&choixPokemon)
+		}
+	
 		choixPokemonFunc(choixPokemon, joueur)
-
+	
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
