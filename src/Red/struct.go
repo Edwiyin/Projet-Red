@@ -47,6 +47,7 @@ type Dresseur struct {
 	Nom        string
 	Equipe     []Pokemon
 	Inventaire []InventoryItem
+	Argent    int
 }
 
 func (p *Pokemon) IsAlive() bool {
