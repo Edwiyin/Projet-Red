@@ -87,7 +87,7 @@ func Combat(joueur *Dresseur) {
 		}
 	}
 
-	if EstVivant(pokemonJoueur) {
+	if pokemonJoueur.EstVivant() {
 		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
 		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
 		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
@@ -108,7 +108,7 @@ func Combat(joueur *Dresseur) {
 			fmt.Scanln(&choixPokemon)
 		}
 
-		choixPokemonFunc(choixPokemon, joueur)
+		choixPokemonFunc(choixPokemon)
 
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
 
