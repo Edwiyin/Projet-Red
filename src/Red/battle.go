@@ -3,86 +3,43 @@ package gokemon
 import (
 	"fmt"
 	"math/rand"
-	"strings"
 )
 
-func AccessInventory(joueur *Dresseur) {
-	for {
-		fmt.Print("\033[2J")
-		fmt.Print("\033[H")
-		AfficherTitre()
-
-		largeur := 50
-		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
-		AfficherLigneMenu("", largeur)
-		AfficherLigneMenu("        INVENTAIRE", largeur)
-		AfficherLigneMenu("", largeur)
-		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
-
-		for i, item := range joueur.Inventaire {
-			AfficherLigneMenu(fmt.Sprintf("%d. %s (x%d)", i+1, item.Nom, item.Quantite), largeur)
-		}
-		AfficherLigneMenu(fmt.Sprintf("%d. Retour au menu principal", len(joueur.Inventaire)+1), largeur)
-		AfficherLigneMenu("", largeur)
-		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
-
-		fmt.Print(Vert("\nEntrez votre choix : "))
-		var choix int
-		fmt.Scanln(&choix)
-
-		if choix == len(joueur.Inventaire)+1 {
-			return
-		} else if choix > 0 && choix <= len(joueur.Inventaire) {
-			item := &joueur.Inventaire[choix-1]
-			if item.Nom == "Potion" {
-				TakePot(item, joueur)
-			} else {
-				fmt.Printf(Jaune("\nVous ne pouvez pas utiliser %s pour le moment.\n"), item.Nom)
-			}
-		} else {
-			fmt.Println(Jaune("\nChoix invalide. Veuillez réessayer."))
-		}
-
-		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
-		fmt.Scanln()
+func (p *Pokemon) GainExperience(exp int) bool {
+	p.Experience += exp
+	if p.Experience >= p.Niveau*100 {
+		p.Experience = 0
+		p.Niveau++
+		return true
 	}
+	return false
 }
 
-func TakePot(potion *Item, joueur *Dresseur) {
-	if potion.Quantite > 0 {
-		if len(joueur.Equipe) > 0 {
-			pokemon := &joueur.Equipe[0]
-			if pokemon.PVActuels < pokemon.PVMax {
-				pokemon.PVActuels += 50
-				if pokemon.PVActuels > pokemon.PVMax {
-					pokemon.PVActuels = pokemon.PVMax
-				}
-				potion.Quantite--
-				fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré 50 PV. PV actuels : %d/%d\n"), pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
-			} else {
-				fmt.Println(Jaune("\nVotre Pokémon a déjà tous ses PV."))
-			}
-		} else {
-			fmt.Println(Jaune("\nVous n'avez pas de Pokémon dans votre équipe."))
-		}
-	} else {
-		fmt.Println(Jaune("\nVous n'avez plus de Potions."))
-	}
-}
-
-func EstVivant(p *Pokemon) bool {
-	return p.PVActuels > 0
-}
-
-func Attaquer(p *Pokemon, cible *Pokemon) {
-	degats := rand.Intn(p.Attaque) + 1
-	cible.PVActuels -= degats
+func (p *Pokemon) Attaquer(cible *Pokemon) int {
+	damage := rand.Intn(10) + 1 
+	cible.PVActuels -= damage
 	if cible.PVActuels < 0 {
 		cible.PVActuels = 0
 	}
-	fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", p.Nom, cible.Nom, degats)
-	fmt.Printf("%s a maintenant %d PV\n", cible.Nom, cible.PVActuels)
+	return damage
 }
+
+func (p *Pokemon) EstVivant() bool {
+	return p.PVActuels > 0
+}
+
+type PokemonType string
+
+const (
+	
+)
+
+
+type Item struct {
+	Nom      string
+	Quantite int
+}
+
 
 func Combat(joueur *Dresseur) {
 	if len(joueur.Equipe) == 0 {
@@ -91,34 +48,42 @@ func Combat(joueur *Dresseur) {
 	}
 
 	pokemonJoueur := &joueur.Equipe[0]
-	ennemi := &Pokemon{Nom: "Roucool", Type: "Vol", Niveau: 5, PVMax: 40, PVActuels: 40, Attaque: 8}
+	ennemi := GenerateWildPokemon()
 
-	fmt.Println(Jaune("\nUn Roucool sauvage apparaît!"))
+	fmt.Printf(Jaune("\nUn %s sauvage de niveau %d apparaît!\n"), ennemi.Nom, ennemi.Niveau)
 
-	for EstVivant(pokemonJoueur) && EstVivant(ennemi) {
+	for pokemonJoueur.EstVivant() && ennemi.EstVivant() {
 		fmt.Println(Jaune("\nQue voulez-vous faire ?"))
 		fmt.Println(Jaune("1. Attaquer"))
 		fmt.Println(Jaune("2. Utiliser une Potion"))
-		fmt.Println(Jaune("3. Fuir"))
+		fmt.Println(Jaune("3. Lancer une Pokéball"))
+		fmt.Println(Jaune("4. Fuir"))
 
 		var choix int
 		fmt.Scan(&choix)
 
 		switch choix {
 		case 1:
-			Attaquer(pokemonJoueur, ennemi)
-			if EstVivant(ennemi) {
-				Attaquer(ennemi, pokemonJoueur)
+			damage := pokemonJoueur.Attaquer(&ennemi)
+			fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+			fmt.Printf("%s a maintenant %d PV\n", ennemi.Nom, ennemi.PVActuels)
+			if ennemi.EstVivant() {
+				damage := ennemi.Attaquer(pokemonJoueur)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
+				fmt.Printf("%s a maintenant %d PV\n", pokemonJoueur.Nom, pokemonJoueur.PVActuels)
 			}
 		case 2:
-			for i, item := range joueur.Inventaire {
-				if item.Nom == "Potion" {
-					TakePot(&joueur.Inventaire[i], joueur)
-					Attaquer(ennemi, pokemonJoueur)
-					break
-				}
+			UsePotion(joueur, pokemonJoueur)
+			if ennemi.EstVivant() {
+				damage := ennemi.Attaquer(pokemonJoueur)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
+				fmt.Printf("%s a maintenant %d PV\n", pokemonJoueur.Nom, pokemonJoueur.PVActuels)
 			}
 		case 3:
+			if TryToCatch(joueur, &ennemi) {
+				return
+			}
+		case 4:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
 			return
 		default:
@@ -126,6 +91,7 @@ func Combat(joueur *Dresseur) {
 		}
 	}
 
+<<<<<<< HEAD
 	if EstVivant(pokemonJoueur) {
 		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
 		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
@@ -150,7 +116,82 @@ func Combat(joueur *Dresseur) {
 		choixPokemonFunc(choixPokemon, joueur)
 
 		fmt.Println(Jaune("Vous avez gagné le combat!"))
+=======
+	if pokemonJoueur.EstVivant() {
+		expGained := ennemi.Niveau * 10
+		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
+		if pokemonJoueur.GainExperience(expGained) {
+			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
+		}
+>>>>>>> 54389c1d0dee910e79e8c4a7cbff2eece45d7b51
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
 	}
+}
+
+func GenerateWildPokemon() Pokemon {
+	wildPokemons := []struct {
+		name string
+		pokemonType PokemonType
+	}{
+		{"Rattata", Normal},
+		{"Pidgey", Flying},
+		{"Caterpie", Bug},
+		{"Weedle", Bug},
+		{"Pikachu", Electric},
+	}
+
+	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
+	level := rand.Intn(5) + 1
+	return Pokemon{
+		Nom:       randomPokemon.name,
+		PVActuels: level * 10,
+		PVMax:     level * 10,
+		Niveau:    level,
+		Type:      randomPokemon.pokemonType,
+		Experience: 0,
+	}
+}
+
+func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
+	for i, item := range joueur.Inventaire {
+		if item.Nom == "Potion" {
+			if item.Quantite > 0 {
+				healAmount := 20
+				pokemon.PVActuels += healAmount
+				if pokemon.PVActuels > pokemon.PVMax {
+					pokemon.PVActuels = pokemon.PVMax
+				}
+				joueur.Inventaire[i].Quantite--
+				fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré %d PV. PV actuels : %d/%d\n"), pokemon.Nom, healAmount, pokemon.PVActuels, pokemon.PVMax)
+			} else {
+				fmt.Println(Jaune("\nVous n'avez plus de Potions."))
+			}
+			return
+		}
+	}
+	fmt.Println(Jaune("\nVous n'avez pas de Potions dans votre inventaire."))
+}
+
+func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
+	for i, item := range joueur.Inventaire {
+		if item.Nom == "Pokéball" {
+			if item.Quantite > 0 {
+				joueur.Inventaire[i].Quantite--
+				catchChance := float64(pokemon.PVMax-pokemon.PVActuels) / float64(pokemon.PVMax)
+				if rand.Float64() < catchChance {
+					joueur.Equipe = append(joueur.Equipe, *pokemon)
+					fmt.Printf(Jaune("\nFélicitations! Vous avez capturé %s!\n"), pokemon.Nom)
+					return true
+				} else {
+					fmt.Println(Jaune("\nLe Pokémon s'est échappé de la Pokéball!"))
+				}
+			} else {
+				fmt.Println(Jaune("\nVous n'avez plus de Pokéballs."))
+			}
+			return false
+		}
+	}
+	fmt.Println(Jaune("\nVous n'avez pas de Pokéballs dans votre inventaire."))
+	return false
 }

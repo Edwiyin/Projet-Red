@@ -6,32 +6,18 @@ import (
 	"strings"
 )
 
-func choixPokemonFunc(choixPokemon string, joueur *Dresseur) *Dresseur {
-	var pokemon Pokemon
+func choixPokemonFunc(choixPokemon string) Pokemon {
 	switch choixPokemon {
 	case "1":
-		pokemon = Pokemon{Nom: "Bulbizarre", Type: "Plante", Niveau: 5, PVMax: 45, PVActuels: 45, Attaque: 10}
+		return NewPokemon("Bulbizarre", Grass, 5)
 	case "2":
-		pokemon = Pokemon{Nom: "Salamèche", Type: "Feu", Niveau: 5, PVMax: 39, PVActuels: 39, Attaque: 11}
+		return NewPokemon("Salamèche", Fire, 5)
 	case "3":
-		pokemon = Pokemon{Nom: "Carapuce", Type: "Eau", Niveau: 5, PVMax: 44, PVActuels: 44, Attaque: 9}
-	case "4":
-		pokemon = Pokemon{Nom: "Vibrannif", Type: "eau", Niveau: 5, PVMax: 44, PVActuels: 44, Attaque: 9}
-	case "5":
-		pokemon = Pokemon{Nom: "Roucool", Type: "Vol", Niveau: 5, PVMax: 40, PVActuels: 40, Attaque: 8}
-	case "6":
-		pokemon = Pokemon{Nom: "Rattata", Type: "Normal", Niveau: 5, PVMax: 30, PVActuels: 30, Attaque: 14}
-	case "7":
-		pokemon = Pokemon{Nom: "Aspicot", Type: "Insecte", Niveau: 5, PVMax: 30, PVActuels: 30, Attaque: 12}
-
+		return NewPokemon("Carapuce", Water, 5)
 	default:
 		fmt.Println(Jaune("Choix invalide. Pokémon par défaut : Pikachu"))
-		pokemon = Pokemon{Nom: "Pikachu", Type: "Électrik", Niveau: 5, PVMax: 35, PVActuels: 35, Attaque: 12}
+		return NewPokemon("Pikachu", Electric, 5)
 	}
-
-	joueur.Equipe = append(joueur.Equipe, pokemon)
-	fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
-	return joueur
 }
 
 func creerDresseur(joueur *Dresseur) {
@@ -47,16 +33,32 @@ func creerDresseur(joueur *Dresseur) {
 		var choixPokemon string
 		fmt.Print(Vert("Entrez votre choix (1-3) : "))
 		fmt.Scanln(&choixPokemon)
-		if choixPokemon <= "3" && choixPokemon >= "1" {
-			choixPokemonFunc(choixPokemon, joueur)
-		} else {
 
-			choixPokemonFunc("x", joueur)
-		}
-
+		pokemon := choixPokemonFunc(choixPokemon)
+		joueur.Equipe = append(joueur.Equipe, pokemon)
+		fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
 	} else {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
 	}
+}
+
+func ViewTeam(joueur *Dresseur) {
+	if len(joueur.Equipe) == 0 {
+		fmt.Println(Jaune("\nVous n'avez pas encore de Pokémon dans votre équipe."))
+		return
+	}
+
+	fmt.Println(Jaune("\nVotre équipe Pokémon :"))
+	for i, pokemon := range joueur.Equipe {
+		fmt.Printf(Jaune("%d. %s (Type: %s, Niveau: %d, PV: %d/%d, Attaque: %d, Exp: %d/%d)\n"),
+			i+1, pokemon.Nom, pokemon.Type, pokemon.Niveau, pokemon.PVActuels, pokemon.PVMax,
+			pokemon.Attaque, pokemon.Experience, pokemon.ExperienceToNextLevel)
+	}
+}
+
+func AccessInventory(joueur *Dresseur) {
+
+	fmt.Println(Jaune("\nAccès à l'inventaire..."))
 }
 
 func MenuPrincipal(joueur *Dresseur) {

@@ -12,9 +12,9 @@ func init() {
 	joueur = gokemon.Dresseur{
 		Nom:    "",
 		Equipe: []gokemon.Pokemon{},
-		Inventaire: []gokemon.Item{
+		Inventaire: []gokemon.InventoryItem{
 			{Nom: "Potion", Quantite: 3},
-			{Nom: "Pokéball", Quantite: 5},
+			{Nom: "Pokéball", Quantite: 10},
 			{Nom: "Baie", Quantite: 2},
 		},
 	}
