@@ -33,17 +33,3 @@ func AfficherLigneMenu(texte string, largeur int) {
 
 	fmt.Printf("%s║ %s%s ║%s\n", Jaune("║"), Jaune(texte), strings.Repeat(" ", espaces), Jaune("║"))
 }
-
-func DisplayInfo(joueur Dresseur) {
-	fmt.Println(Jaune("\nInformations du dresseur :"))
-	fmt.Printf(Jaune("Nom : %s\n"), joueur.Nom)
-	fmt.Printf(Jaune("Solde : %d PokéDollars\n"), joueur.Argent)
-	fmt.Println(Jaune("\nÉquipe Pokémon :"))
-	for _, pokemon := range joueur.Equipe {
-		fmt.Printf(Jaune("- %s (Type: %s, Niveau: %d, PV: %d/%d, Attaque: %d)\n"), pokemon.Nom, pokemon.Type, pokemon.Niveau, pokemon.PVActuels, pokemon.PVMax, pokemon.Attaque)
-	}
-	fmt.Println(Jaune("\nInventaire :"))
-	for _, item := range joueur.Inventaire {
-		fmt.Printf(Jaune("- %s (x%d)\n"), item.Nom, item.Quantite)
-	}
-}
