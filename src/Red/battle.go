@@ -3,6 +3,7 @@ package gokemon
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 func (p *Pokemon) GainExperience(exp int) bool {
@@ -43,17 +44,19 @@ func Combat(joueur *Dresseur) {
 		return
 	}
 
-	pokemonJoueur := &joueur.Equipe[0]
+	pokemonJoueur := ChoisirPokemon(joueur)
 	ennemi := GenerateWildPokemon()
 
 	fmt.Printf(Jaune("\nUn %s sauvage de niveau %d apparaît!\n"), ennemi.Nom, ennemi.Niveau)
+	fmt.Printf(Jaune("Vous envoyez %s au combat!\n"), pokemonJoueur.Nom)
 
 	for pokemonJoueur.EstVivant() && ennemi.EstVivant() {
 		fmt.Println(Jaune("\nQue voulez-vous faire ?"))
 		fmt.Println(Jaune("1. Attaquer"))
 		fmt.Println(Jaune("2. Utiliser une Potion"))
 		fmt.Println(Jaune("3. Lancer une Pokéball"))
-		fmt.Println(Jaune("4. Fuir"))
+		fmt.Println(Jaune("4. Changer de Pokémon"))
+		fmt.Println(Jaune("5. Fuir"))
 
 		var choix int
 		fmt.Scan(&choix)
@@ -80,47 +83,48 @@ func Combat(joueur *Dresseur) {
 				return
 			}
 		case 4:
+			nouveauPokemon := ChoisirPokemon(joueur)
+			if nouveauPokemon != pokemonJoueur {
+				pokemonJoueur = nouveauPokemon
+				fmt.Printf(Jaune("\nVous rappelez %s et envoyez %s au combat!\n"), pokemonJoueur.Nom, nouveauPokemon.Nom)
+				damage := ennemi.Attaquer(pokemonJoueur)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
+				fmt.Printf("%s a maintenant %d PV\n", pokemonJoueur.Nom, pokemonJoueur.PVActuels)
+			} else {
+				fmt.Println(Jaune("\nVous avez choisi le même Pokémon. Le combat continue."))
+			}
+		case 5:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
 			return
 		default:
 			fmt.Println(Jaune("Choix invalide."))
 		}
+
+		if !pokemonJoueur.EstVivant() {
+			nouveauPokemon := ChoisirPokemonVivant(joueur)
+			if nouveauPokemon != nil {
+				pokemonJoueur = nouveauPokemon
+				fmt.Printf(Jaune("\n%s est K.O. ! Vous envoyez %s au combat!\n"), pokemonJoueur.Nom, nouveauPokemon.Nom)
+			} else {
+				fmt.Println(Jaune("\nTous vos Pokémon sont K.O. ! Vous avez perdu le combat..."))
+				return
+			}
+		}
 	}
 
 	if pokemonJoueur.EstVivant() {
-		fmt.Println(Jaune("\nChoisissez votre nouveau Pokémon :"))
-		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
-		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
-		fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
-		fmt.Println(Jaune("4. Vibrannif (Type: Eau)"))
-		fmt.Println(Jaune("5. Roucool (Type: Vol)"))
-		fmt.Println(Jaune("6. Rattata (Type: Normal)"))
-		fmt.Println(Jaune("7. Aspicot (Type: Insecte)"))
-
-		var choixPokemon string
-		fmt.Print(Vert("Entrez votre choix (1-7) : "))
-		fmt.Scanln(&choixPokemon)
-
-		for choixPokemon < "1" || choixPokemon > "7" {
-			fmt.Println(Vert("Choix invalide. Veuillez choisir entre 1 et 7."))
-			fmt.Print(Vert("Entrez votre choix (1-7) : "))
-			fmt.Scanln(&choixPokemon)
+		expGained := ennemi.Niveau * 10
+		moneyGained := ennemi.Niveau * 50
+		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
+		fmt.Printf(Jaune("Vous avez gagné %d PokéDollars!\n"), moneyGained)
+		joueur.Argent += moneyGained
+		time.Sleep(5 * time.Second)
+		if pokemonJoueur.GainExperience(expGained) {
+			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
 		}
-
-		choixPokemonFunc(choixPokemon)
-
-		fmt.Println(Jaune("Vous avez gagné le combat!"))
-
-		if pokemonJoueur.EstVivant() {
-			expGained := ennemi.Niveau * 10
-			fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
-			if pokemonJoueur.GainExperience(expGained) {
-				fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
-			}
-
-		} else {
-			fmt.Println(Jaune("Vous avez perdu le combat..."))
-		}
+	} else {
+		fmt.Println(Jaune("Vous avez perdu le combat..."))
+		time.Sleep(5 * time.Second)
 	}
 }
 
@@ -134,6 +138,19 @@ func GenerateWildPokemon() Pokemon {
 		{"Caterpie", Bug},
 		{"Weedle", Bug},
 		{"Pikachu", Electric},
+		{"Eevee", Normal},
+		{"Vulpix", Fire},
+		{"Jigglypuff", Normal},
+		{"Zubat", Flying},
+		{"Oddish", Grass},
+		{"Paras", Bug},
+		{"Venonat", Bug},
+		{"Meowth", Normal},
+		{"Psyduck", Water},
+		{"Mankey", Normal},
+		{"Growlithe", Fire},
+		{"Poliwag", Water},
+
 	}
 
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
@@ -174,9 +191,11 @@ func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 			if item.Quantite > 0 {
 				joueur.Inventaire[i].Quantite--
 				catchChance := float64(pokemon.PVMax-pokemon.PVActuels) / float64(pokemon.PVMax)
+				fmt.Printf(Jaune("\nVous lancez une Pokéball... Chance de capture : %.2f\n"), catchChance)
 				if rand.Float64() < catchChance {
 					joueur.Equipe = append(joueur.Equipe, *pokemon)
 					fmt.Printf(Jaune("\nFélicitations! Vous avez capturé %s!\n"), pokemon.Nom)
+					time.Sleep(5 * time.Second)
 					return true
 				} else {
 					fmt.Println(Jaune("\nLe Pokémon s'est échappé de la Pokéball!"))
@@ -189,4 +208,34 @@ func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 	}
 	fmt.Println(Jaune("\nVous n'avez pas de Pokéballs dans votre inventaire."))
 	return false
+}
+
+func ChoisirPokemon(joueur *Dresseur) *Pokemon {
+	if len(joueur.Equipe) == 1 {
+		return &joueur.Equipe[0]
+	}
+
+	fmt.Println(Jaune("\nChoisissez votre Pokémon pour ce combat :"))
+	for i, pokemon := range joueur.Equipe {
+		fmt.Printf(Jaune("%d. %s (Niveau: %d, PV: %d/%d)\n"), i+1, pokemon.Nom, pokemon.Niveau, pokemon.PVActuels, pokemon.PVMax)
+	}
+
+	var choix int
+	for {
+		fmt.Print(Vert("\nEntrez le numéro du Pokémon que vous voulez utiliser : "))
+		fmt.Scanln(&choix)
+		if choix > 0 && choix <= len(joueur.Equipe) {
+			return &joueur.Equipe[choix-1]
+		}
+		fmt.Println(Jaune("Choix invalide. Veuillez réessayer."))
+	}
+}
+
+func ChoisirPokemonVivant(joueur *Dresseur) *Pokemon {
+	for i := range joueur.Equipe {
+		if joueur.Equipe[i].EstVivant() {
+			return &joueur.Equipe[i]
+		}
+	}
+	return nil
 }

@@ -90,6 +90,10 @@ func AccessInventory(joueur *Dresseur) {
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
+		// Affichage du solde
+		AfficherLigneMenu(fmt.Sprintf("Solde: %d PokéDollars", joueur.Argent), largeur)
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+
 		for i, item := range joueur.Inventaire {
 			AfficherLigneMenu(fmt.Sprintf("%d. %s (x%d)", i+1, item.Nom, item.Quantite), largeur)
 		}
@@ -135,11 +139,12 @@ func MenuPrincipal(joueur *Dresseur) {
 		AfficherLigneMenu("2. Afficher les informations du dresseur", largeur)
 		AfficherLigneMenu("3. Accéder à l'inventaire  ", largeur)
 		AfficherLigneMenu("4. Combat", largeur)
-		AfficherLigneMenu("5. Quitter", largeur)
+		AfficherLigneMenu("5. Visiter le marchand", largeur)
+		AfficherLigneMenu("6. Quitter", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Print(Vert("\nEntrez votre choix (1-5): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-6): "))
 		var choix string
 		fmt.Scanln(&choix)
 
@@ -157,6 +162,8 @@ func MenuPrincipal(joueur *Dresseur) {
 		case "4":
 			Combat(joueur)
 		case "5":
+			VisiteMarchand(joueur)
+		case "6":
 			fmt.Println(Jaune("\nMerci d'avoir joué. Au revoir!"))
 			os.Exit(0)
 		default:
@@ -165,5 +172,104 @@ func MenuPrincipal(joueur *Dresseur) {
 
 		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
 		fmt.Scanln()
+	}
+}
+
+func VisiteMarchand(joueur *Dresseur) {
+	for {
+		largeur := 50
+		fmt.Print("\033[2J")
+		fmt.Print("\033[H")
+		AfficherTitre()
+
+		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu("        BOUTIQUE DU MARCHAND", largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+		AfficherLigneMenu("1. Acheter une Potion (50 PokéDollars)", largeur)
+		AfficherLigneMenu("2. Acheter une Pokéball (100 PokéDollars)", largeur)
+		AfficherLigneMenu("3. Vendre un objet", largeur)
+		AfficherLigneMenu("4. Retour au menu principal", largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
+
+		fmt.Printf(Jaune("\nVotre solde: %d PokéDollars\n"), joueur.Argent)
+		fmt.Print(Vert("\nEntrez votre choix (1-4): "))
+		var choix string
+		fmt.Scanln(&choix)
+
+		switch choix {
+		case "1":
+			AcheterObjet(joueur, "Potion", 50)
+		case "2":
+			AcheterObjet(joueur, "Pokéball", 100)
+		case "3":
+			VendreObjet(joueur)
+		case "4":
+			return
+		default:
+			fmt.Println(Jaune("\nChoix invalide. Veuillez réessayer."))
+		}
+
+		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
+		fmt.Scanln()
+	}
+}
+
+func AcheterObjet(joueur *Dresseur, nomObjet string, prix int) {
+	if joueur.Argent >= prix {
+		joueur.Argent -= prix
+		for i := range joueur.Inventaire {
+			if joueur.Inventaire[i].Nom == nomObjet {
+				joueur.Inventaire[i].Quantite++
+				fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
+				return
+			}
+		}
+		joueur.Inventaire = append(joueur.Inventaire, InventoryItem{Nom: nomObjet, Quantite: 1})
+		fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
+	} else {
+		fmt.Println(Jaune("\nVous n'avez pas assez d'argent pour acheter cet objet."))
+	}
+}
+
+func VendreObjet(joueur *Dresseur) {
+	fmt.Println(Jaune("\nQuels objets voulez-vous vendre ?"))
+	for i, item := range joueur.Inventaire {
+		fmt.Printf(Jaune("%d. %s (x%d) - Prix de vente: %d PokéDollars\n"), i+1, item.Nom, item.Quantite, GetPrixVente(item.Nom))
+	}
+	fmt.Printf(Jaune("%d. Annuler\n"), len(joueur.Inventaire)+1)
+
+	var choix int
+	fmt.Print(Vert("\nEntrez votre choix : "))
+	fmt.Scanln(&choix)
+
+	if choix > 0 && choix <= len(joueur.Inventaire) {
+		item := &joueur.Inventaire[choix-1]
+		if item.Quantite > 0 {
+			prixVente := GetPrixVente(item.Nom)
+			joueur.Argent += prixVente
+			item.Quantite--
+			fmt.Printf(Jaune("\nVous avez vendu un(e) %s pour %d PokéDollars.\n"), item.Nom, prixVente)
+			if item.Quantite == 0 {
+				joueur.Inventaire = append(joueur.Inventaire[:choix-1], joueur.Inventaire[choix:]...)
+			}
+		} else {
+			fmt.Println(Jaune("\nVous n'avez plus de cet objet dans votre inventaire."))
+		}
+	} else if choix != len(joueur.Inventaire)+1 {
+		fmt.Println(Jaune("\nChoix invalide."))
+	}
+}
+
+func GetPrixVente(nomObjet string) int {
+	switch nomObjet {
+	case "Potion":
+		return 25
+	case "Pokéball":
+		return 50
+	default:
+		return 10
 	}
 }
