@@ -121,7 +121,7 @@ func AccessInventory(joueur *Dresseur) {
 	}
 }
 
-func MenuPrincipal(joueur *Dresseur) {
+func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
 	largeur := 50
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")

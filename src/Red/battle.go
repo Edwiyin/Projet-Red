@@ -150,7 +150,6 @@ func GenerateWildPokemon() Pokemon {
 		{"Mankey", Normal},
 		{"Growlithe", Fire},
 		{"Poliwag", Water},
-
 	}
 
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]

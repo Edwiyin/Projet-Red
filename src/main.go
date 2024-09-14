@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	gokemon "gokemon/Red"
 	"math/rand"
 	"time"
 )
 
 var joueur gokemon.Dresseur
+var audioManager *gokemon.AudioManager
 
 func init() {
 	joueur = gokemon.Dresseur{
@@ -17,9 +19,19 @@ func init() {
 			{Nom: "Pokéball", Quantite: 5},
 		},
 	}
+
+	audioManager = gokemon.NewAudioManager()
+
+	err := audioManager.LoadBackgroundMusic("assets/music/gokemon.mp3")
+	if err != nil {
+		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
+	}
 }
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	gokemon.MenuPrincipal(&joueur)
+	audioManager.PlayBackgroundMusic()
+
+	gokemon.MenuPrincipal(&joueur, audioManager)
+
 }
