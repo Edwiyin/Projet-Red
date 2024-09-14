@@ -10,8 +10,4 @@ func DisplayInfo(joueur Dresseur) {
 	for _, pokemon := range joueur.Equipe {
 		fmt.Printf(Jaune("- %s (Type: %s, Niveau: %d, PV: %d/%d, Attaque: %d)\n"), pokemon.Nom, pokemon.Type, pokemon.Niveau, pokemon.PVActuels, pokemon.PVMax, pokemon.Attaque)
 	}
-	fmt.Println(Jaune("\nInventaire :"))
-	for _, item := range joueur.Inventaire {
-		fmt.Printf(Jaune("- %s (x%d)\n"), item.Nom, item.Quantite)
-	}
 }
