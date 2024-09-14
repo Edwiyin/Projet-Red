@@ -25,8 +25,6 @@ func TakePot(item *Item, joueur *Dresseur) {
 	}
 }
 
-
-
 func choixPokemonFunc(choixPokemon string) Pokemon {
 	switch choixPokemon {
 	case "1":
@@ -124,6 +122,19 @@ func AccessInventory(joueur *Dresseur) {
 }
 
 func MenuPrincipal(joueur *Dresseur) {
+	largeur := 50
+	fmt.Print("\033[2J")
+	fmt.Print("\033[H")
+	AfficherTitre()
+
+	fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
+	AfficherLigneMenu("", largeur)
+	AfficherLigneMenu("        NEW GAME", largeur)
+	AfficherLigneMenu("", largeur)
+	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
+
+	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
+	fmt.Scanln()
 	for {
 		largeur := 50
 		fmt.Print("\033[2J")
