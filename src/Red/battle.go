@@ -6,6 +6,21 @@ import (
 	"time"
 )
 
+func poisonPot(pokemon *Pokemon) {
+	fmt.Printf(Jaune("\nLa Potion de Poison affecte %s !\n"), pokemon.Nom)
+	for i := 0; i < 3; i++ {
+		time.Sleep(1 * time.Second)
+		pokemon.PVActuels -= 10
+		if pokemon.PVActuels < 0 {
+			pokemon.PVActuels = 0
+		}
+		fmt.Printf(Jaune("%s subit 10 points de dégâts. PV actuels : %d/%d\n"), pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
+		if pokemon.PVActuels == 0 {
+			fmt.Printf(Jaune("%s est K.O. !\n"), pokemon.Nom)
+			break
+		}
+	}
+}
 func (p *Pokemon) GainExperience(exp int) bool {
 	p.Experience += exp
 	if p.Experience >= p.Niveau*100 {
@@ -55,8 +70,9 @@ func Combat(joueur *Dresseur) {
 		fmt.Println(Jaune("1. Attaquer"))
 		fmt.Println(Jaune("2. Utiliser une Potion"))
 		fmt.Println(Jaune("3. Lancer une Pokéball"))
-		fmt.Println(Jaune("4. Changer de Pokémon"))
-		fmt.Println(Jaune("5. Fuir"))
+		fmt.Println(Jaune("4. Utiliser une Potion de Poison"))
+		fmt.Println(Jaune("5. Changer de Pokémon"))
+		fmt.Println(Jaune("6. Fuir"))
 
 		var choix int
 		fmt.Scan(&choix)
@@ -83,6 +99,14 @@ func Combat(joueur *Dresseur) {
 				return
 			}
 		case 4:
+			if UsePoisonPotion(joueur, &ennemi) {
+				if ennemi.EstVivant() {
+					damage := ennemi.Attaquer(pokemonJoueur)
+					fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
+					fmt.Printf("%s a maintenant %d PV\n", pokemonJoueur.Nom, pokemonJoueur.PVActuels)
+				}
+			}
+		case 5:
 			nouveauPokemon := ChoisirPokemon(joueur)
 			if nouveauPokemon != pokemonJoueur {
 				pokemonJoueur = nouveauPokemon
@@ -93,7 +117,7 @@ func Combat(joueur *Dresseur) {
 			} else {
 				fmt.Println(Jaune("\nVous avez choisi le même Pokémon. Le combat continue."))
 			}
-		case 5:
+		case 6:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
 			return
 		default:
@@ -265,5 +289,21 @@ func Dead(joueur *Dresseur) bool {
 		return true
 	}
 
+	return false
+}
+func UsePoisonPotion(joueur *Dresseur, pokemon *Pokemon) bool {
+	for i, item := range joueur.Inventaire {
+		if item.Nom == "Potion de Poison" {
+			if item.Quantite > 0 {
+				joueur.Inventaire[i].Quantite--
+				poisonPot(pokemon)
+				return true
+			} else {
+				fmt.Println(Jaune("\nVous n'avez plus de Potions de Poison."))
+				return false
+			}
+		}
+	}
+	fmt.Println(Jaune("\nVous n'avez pas de Potions de Poison dans votre inventaire."))
 	return false
 }
