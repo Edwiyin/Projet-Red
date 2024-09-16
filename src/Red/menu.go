@@ -28,14 +28,14 @@ func TakePot(item *Item, joueur *Dresseur) {
 func choixPokemonFunc(choixPokemon string) Pokemon {
 	switch choixPokemon {
 	case "1":
-		return NewPokemon("Bulbizarre", Grass, 5)
+		return NewPokemon("Bulbizarre", Grass, 1)
 	case "2":
-		return NewPokemon("Salamèche", Fire, 5)
+		return NewPokemon("Salamèche", Fire, 1)
 	case "3":
-		return NewPokemon("Carapuce", Water, 5)
+		return NewPokemon("Carapuce", Water, 1)
 	default:
 		fmt.Println(Jaune("Choix invalide. Pokémon par défaut : Pikachu"))
-		return NewPokemon("Pikachu", Electric, 5)
+		return NewPokemon("Pikachu", Electric, 1)
 	}
 }
 
@@ -88,7 +88,6 @@ func AccessInventory(joueur *Dresseur) {
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
-		// Affichage du solde
 		AfficherLigneMenu(fmt.Sprintf("Solde: %d PokéDollars", joueur.Argent), largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
