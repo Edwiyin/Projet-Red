@@ -35,3 +35,5 @@ func main() {
 	gokemon.MenuPrincipal(&joueur, audioManager)
 
 }
+
+fmt.Println("Fin du jeu")
