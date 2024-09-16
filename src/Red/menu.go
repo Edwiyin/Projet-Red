@@ -187,7 +187,7 @@ func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
 
 func VisiteMarchand(joueur *Dresseur) {
 	for {
-		largeur := 50
+		largeur := 60
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")
 		AfficherTitre()
