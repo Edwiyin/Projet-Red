@@ -157,7 +157,7 @@ func GenerateWildPokemon() Pokemon {
 	}
 
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-	level := rand.Intn(3) + 1 
+	level := rand.Intn(3) + 1
 	return Pokemon{
 		Nom:        randomPokemon.name,
 		PVActuels:  level * 10,
@@ -253,7 +253,7 @@ func Dead(joueur *Dresseur) bool {
 
 	if allDead {
 		fmt.Println(Jaune("\nTous vos Pokémon sont K.O. ! Vous êtes transporté au centre Pokémon le plus proche..."))
-		time.Sleep(6 * time.Second)
+		time.Sleep(4 * time.Second)
 
 		for i := range joueur.Equipe {
 			joueur.Equipe[i].PVActuels = joueur.Equipe[i].PVMax / 2
@@ -261,7 +261,7 @@ func Dead(joueur *Dresseur) bool {
 		}
 
 		fmt.Println(Jaune("\nVos Pokémon ont été soignés. Prenez soin d'eux !"))
-		time.Sleep(6 * time.Second)
+		time.Sleep(4 * time.Second)
 		return true
 	}
 
