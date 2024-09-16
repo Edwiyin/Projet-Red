@@ -178,18 +178,29 @@ func GenerateWildPokemon() Pokemon {
 		{"Mankey", Normal},
 		{"Growlithe", Fire},
 		{"Poliwag", Water},
-	}
+		{"Horsea", Water},
+		{"Goldeen", Water},
+		{"Staryu", Water},
+		{"Scyther", Bug},
+		{"Electabuzz", Electric},
+		{"Magmar", Fire},
+		{"Ronflex", Normal},
+		{"Dracaufeu", Fire},
+		{"Tortank", Water},
+		{"Florizarre", Grass},
 
-	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-	level := rand.Intn(3) + 1
-	return Pokemon{
-		Nom:        randomPokemon.name,
-		PVActuels:  level * 10,
-		PVMax:      level * 10,
-		Niveau:     level,
-		Type:       randomPokemon.pokemonType,
-		Experience: 0,
-	}
+		}
+	
+		randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
+		level := rand.Intn(3) + 1
+		return Pokemon{
+			Nom:        randomPokemon.name,
+			PVActuels:  level * 10,
+			PVMax:      level * 10,
+			Niveau:     level,
+			Type:       randomPokemon.pokemonType,
+			Experience: 0,
+		}
 }
 
 func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
