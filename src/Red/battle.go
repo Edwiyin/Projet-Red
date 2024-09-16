@@ -128,7 +128,7 @@ func Combat(joueur *Dresseur) {
 			nouveauPokemon := ChoisirPokemonVivant(joueur)
 			if nouveauPokemon != nil {
 				pokemonJoueur = nouveauPokemon
-				fmt.Printf(Jaune("\n%s est K.O. ! Vous envoyez %s au combat!\n"), pokemonJoueur.Nom, nouveauPokemon.Nom)
+				fmt.Printf(Jaune("\nVotre Pokemon est K.O. ! Vous envoyez %s au combat!\n"), nouveauPokemon.Nom)
 			} else {
 				if Dead(joueur) {
 					fmt.Println(Jaune("\nVous avez perdu le combat..."))
