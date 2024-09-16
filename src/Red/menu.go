@@ -199,13 +199,14 @@ func VisiteMarchand(joueur *Dresseur) {
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("1. Acheter une Potion (50 PokéDollars)", largeur)
 		AfficherLigneMenu("2. Acheter une Pokéball (100 PokéDollars)", largeur)
-		AfficherLigneMenu("3. Vendre un objet", largeur)
-		AfficherLigneMenu("4. Retour au menu principal", largeur)
+		AfficherLigneMenu("3. Acheter une Potion de Poison (75 PokéDollars)", largeur)
+		AfficherLigneMenu("4. Vendre un objet", largeur)
+		AfficherLigneMenu("5. Retour au menu principal", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
 		fmt.Printf(Jaune("\nVotre solde: %d PokéDollars\n"), joueur.Argent)
-		fmt.Print(Vert("\nEntrez votre choix (1-4): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-5): "))
 		var choix string
 		fmt.Scanln(&choix)
 
@@ -215,8 +216,10 @@ func VisiteMarchand(joueur *Dresseur) {
 		case "2":
 			AcheterObjet(joueur, "Pokéball", 100)
 		case "3":
-			VendreObjet(joueur)
+			AcheterObjet(joueur, "Potion de Poison", 75)
 		case "4":
+			VendreObjet(joueur)
+		case "5":
 			return
 		default:
 			fmt.Println(Jaune("\nChoix invalide. Veuillez réessayer."))
@@ -279,6 +282,8 @@ func GetPrixVente(nomObjet string) int {
 		return 25
 	case "Pokéball":
 		return 50
+	case "Potion de Poison":
+		return 35
 	default:
 		return 10
 	}
