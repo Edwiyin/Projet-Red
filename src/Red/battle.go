@@ -106,8 +106,12 @@ func Combat(joueur *Dresseur) {
 				pokemonJoueur = nouveauPokemon
 				fmt.Printf(Jaune("\n%s est K.O. ! Vous envoyez %s au combat!\n"), pokemonJoueur.Nom, nouveauPokemon.Nom)
 			} else {
-				fmt.Println(Jaune("\nTous vos Pokémon sont K.O. ! Vous avez perdu le combat..."))
-				return
+				if Dead(joueur) {
+					fmt.Println(Jaune("\nVous avez perdu le combat..."))
+					return
+				}
+				pokemonJoueur = &joueur.Equipe[0] // On utilise le premier Pokémon ressuscité
+				fmt.Printf(Jaune("\nVous continuez le combat avec %s!\n"), pokemonJoueur.Nom)
 			}
 		}
 	}
@@ -118,7 +122,7 @@ func Combat(joueur *Dresseur) {
 		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
 		fmt.Printf(Jaune("Vous avez gagné %d PokéDollars!\n"), moneyGained)
 		joueur.Argent += moneyGained
-		time.Sleep(5 * time.Second)
+		time.Sleep(6 * time.Second)
 		if pokemonJoueur.GainExperience(expGained) {
 			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
 		}
@@ -237,4 +241,29 @@ func ChoisirPokemonVivant(joueur *Dresseur) *Pokemon {
 		}
 	}
 	return nil
+}
+func Dead(joueur *Dresseur) bool {
+	allDead := true
+	for i := range joueur.Equipe {
+		if joueur.Equipe[i].EstVivant() {
+			allDead = false
+			break
+		}
+	}
+
+	if allDead {
+		fmt.Println(Jaune("\nTous vos Pokémon sont K.O. ! Vous êtes transporté au centre Pokémon le plus proche..."))
+		time.Sleep(6 * time.Second)
+
+		for i := range joueur.Equipe {
+			joueur.Equipe[i].PVActuels = joueur.Equipe[i].PVMax / 2
+			fmt.Printf(Jaune("%s a été ressuscité avec %d PV.\n"), joueur.Equipe[i].Nom, joueur.Equipe[i].PVActuels)
+		}
+
+		fmt.Println(Jaune("\nVos Pokémon ont été soignés. Prenez soin d'eux !"))
+		time.Sleep(6 * time.Second)
+		return true
+	}
+
+	return false
 }
