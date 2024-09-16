@@ -157,7 +157,7 @@ func GenerateWildPokemon() Pokemon {
 	}
 
 	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-	level := rand.Intn(5) + 1
+	level := rand.Intn(3) + 1 
 	return Pokemon{
 		Nom:        randomPokemon.name,
 		PVActuels:  level * 10,
