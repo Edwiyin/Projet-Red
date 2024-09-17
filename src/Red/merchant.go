@@ -38,7 +38,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		case "2":
 			AcheterObjet(joueur, "Pokéball", 100)
 		case "3":
-			AcheterObjet(joueur, "Potion de Poison", 75)
+			AcheterObjet(joueur, "Potion de Poison", 150)
 		case "4":
 			VendreObjet(joueur)
 	    case "5":
@@ -144,8 +144,8 @@ func GetPrixVente(nomObjet string) int {
 	case "Pokéball":
 		return 50
 	case "Potion de Poison":
-		return 35
+		return 150
 	default:
-		return 10
+		return 35
 	}
 }

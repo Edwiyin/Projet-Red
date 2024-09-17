@@ -162,7 +162,7 @@ func Combat(joueur *Dresseur) {
 				UsePotion(joueur, pokemonJoueur)
 				state = true
 			case 2:
-				if UsePoisonPotion(joueur, pokemonJoueur) {
+				if UsePoisonPotion(joueur, &ennemi) {
 				}
 				state = true
 			case 3:

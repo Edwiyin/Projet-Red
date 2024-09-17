@@ -15,8 +15,9 @@ func init() {
 		Nom:    "",
 		Equipe: []gokemon.Pokemon{},
 		Inventaire: []gokemon.InventoryItem{
-			{Nom: "Potion", Quantite: 5},
+			{Nom: "Potion de Soin", Quantite: 5},
 			{Nom: "Pokéball", Quantite: 5},
+			{Nom: "Potion de Poison", Quantite: 1},
 		},
 	}
 

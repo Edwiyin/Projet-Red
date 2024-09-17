@@ -118,6 +118,10 @@ func (p *Pokemon) LevelUp() {
 	p.Attaque += rand.Intn(2) + 1
 	p.PVActuels = p.PVMax
 	p.ExperienceToNextLevel = int(float64(p.ExperienceToNextLevel) * 1.2)
+	p.UnlockSkills()
+}
+
+func (p *Pokemon) UnlockSkills() {
 	if p.Niveau >= 2 {
 		p.Skills = SkillName[p.Type]
 	}
