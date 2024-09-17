@@ -79,6 +79,7 @@ func Combat(joueur *Dresseur) {
 			fmt.Println(Jaune("5. Retour"))
 
 			fmt.Scan(&choix)
+			//Test Git
 			switch choix {
 			case 1:
 				damage := pokemonJoueur.Attaquer(&ennemi)
