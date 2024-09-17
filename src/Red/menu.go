@@ -82,6 +82,7 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 			AccessInventory(joueur)
 		case "4":
 			Combat(joueur)
+
 		case "5":
 			VisiteMarchand(joueur)
 		case "6":
