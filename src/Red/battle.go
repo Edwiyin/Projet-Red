@@ -61,7 +61,7 @@ func Combat(joueur *Dresseur) {
 	}
 
 	pokemonJoueur := ChoisirPokemon(joueur)
-	ennemi := GenerateWildPokemon()
+	ennemi := GenerateWildPokemon(joueur)
 
 	fmt.Printf(Jaune("\nUn %s sauvage de niveau %d apparaît!\n"), ennemi.Nom, ennemi.Niveau)
 	fmt.Printf(Jaune("Vous envoyez %s au combat!\n"), pokemonJoueur.Nom)
@@ -158,50 +158,67 @@ func Combat(joueur *Dresseur) {
 	}
 }
 
-func GenerateWildPokemon() Pokemon {
-	wildPokemons := []struct {
-		name        string
-		pokemonType PokemonType
-	}{
-		{"Rattata", Normal},
-		{"Pidgey", Flying},
-		{"Caterpie", Bug},
-		{"Weedle", Bug},
-		{"Pikachu", Electric},
-		{"Eevee", Normal},
-		{"Vulpix", Fire},
-		{"Jigglypuff", Normal},
-		{"Zubat", Flying},
-		{"Oddish", Grass},
-		{"Paras", Bug},
-		{"Venonat", Bug},
-		{"Meowth", Normal},
-		{"Psyduck", Water},
-		{"Mankey", Normal},
-		{"Growlithe", Fire},
-		{"Poliwag", Water},
-		{"Horsea", Water},
-		{"Goldeen", Water},
-		{"Staryu", Water},
-		{"Scyther", Bug},
-		{"Electabuzz", Electric},
-		{"Magmar", Fire},
-		{"Ronflex", Normal},
-		{"Dracaufeu", Fire},
-		{"Tortank", Water},
-		{"Florizarre", Grass},
-	}
+func GenerateWildPokemon(joueur *Dresseur) Pokemon {
+    wildPokemons := []struct {
+        name        string
+        pokemonType PokemonType
+    }{
+        {"Rattata", Normal},
+        {"Pidgey", Flying},
+        {"Caterpie", Bug},
+        {"Weedle", Bug},
+        {"Pikachu", Electric},
+        {"Eevee", Normal},
+        {"Vulpix", Fire},
+        {"Jigglypuff", Normal},
+        {"Zubat", Flying},
+        {"Oddish", Grass},
+        {"Paras", Bug},
+        {"Venonat", Bug},
+        {"Meowth", Normal},
+        {"Psyduck", Water},
+        {"Mankey", Normal},
+        {"Growlithe", Fire},
+        {"Poliwag", Water},
+        {"Horsea", Water},
+        {"Goldeen", Water},
+        {"Staryu", Water},
+        {"Scyther", Bug},
+        {"Electabuzz", Electric},
+        {"Magmar", Fire},
+        {"Ronflex", Normal},
+        {"Dracaufeu", Fire},
+        {"Tortank", Water},
+        {"Florizarre", Grass},
+    }
 
-	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-	level := rand.Intn(3) + 1
-	return Pokemon{
-		Nom:        randomPokemon.name,
-		PVActuels:  level * 10,
-		PVMax:      level * 10,
-		Niveau:     level,
-		Type:       randomPokemon.pokemonType,
-		Experience: 0,
-	}
+    maxLevel := 1
+    for _, pokemon := range joueur.Equipe {
+        if pokemon.Niveau > maxLevel {
+            maxLevel = pokemon.Niveau
+        }
+    }
+
+    var level int
+    if maxLevel <= 5 {
+        level = rand.Intn(3) + 1
+    } else {
+        minLevel := maxLevel - 2
+        maxLevel := maxLevel + 2
+        level = rand.Intn(maxLevel-minLevel+1) + minLevel
+    }
+
+    randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
+    
+    return Pokemon{
+        Nom:        randomPokemon.name,
+        PVMax:      level * 10,
+        PVActuels:  level * 10,
+        Niveau:     level,
+        Type:       randomPokemon.pokemonType,
+        Experience: 0,
+        Attaque:    level * 5,
+    }
 }
 
 func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
