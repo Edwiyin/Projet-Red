@@ -22,11 +22,11 @@ func init() {
 
 	audioManager = gokemon.NewAudioManager()
 
-	err := audioManager.LoadBackgroundMusic("assets/music/titlescreen.mp3")
+	err := audioManager.LoadBackgroundMusic("assets/music/titlescreen1.mp3")
 	if err != nil {
 		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
 	}
-	err = audioManager.LoadSoundEffect("select", "assets/music/select.mp3")
+	err = audioManager.LoadSoundEffect("select", "assets/music/select1.mp3")
 	if err != nil {
 		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
 	}
