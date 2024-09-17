@@ -73,7 +73,7 @@ func (p *Pokemon) LevelUp() {
 }
 
 func NewPokemon(nom string, pokemonType PokemonType, niveau int) Pokemon {
-	baseHP := 20 + rand.Intn(10)
+	baseHP := 30 + rand.Intn(10)
 	baseAttack := 5 + rand.Intn(5)
 	return Pokemon{
 		Nom:                   nom,
