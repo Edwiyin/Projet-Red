@@ -6,32 +6,7 @@ import (
 	"strings"
 )
 
-
-
 var audioManager *AudioManager
-
-func choixPokemonFunc(choixPokemon string) Pokemon {
-	switch choixPokemon {
-	case "1":
-		pokemon := NewPokemon("Bulbizarre", Grass, 1)
-        pokemon.PVActuels = pokemon.PVMax / 2
-return pokemon
-	case "2":
-		pokemon := NewPokemon("Salamèche", Fire, 1)
-		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
-	case "3":
-		pokemon := NewPokemon("Carapuce", Water, 1)
-		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
-	default:
-		fmt.Println(Jaune("Choix invalide. Pokémon par défaut : Pikachu"))
-		pokemon := NewPokemon("Pikachu", Electric, 1)
-		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
-	    
-	}
-}
 
 func creerDresseur(joueur *Dresseur) {
 	if joueur.Nom == "" {
@@ -52,20 +27,6 @@ func creerDresseur(joueur *Dresseur) {
 		fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
 	} else {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
-	}
-}
-
-func ViewTeam(joueur *Dresseur) {
-	if len(joueur.Equipe) == 0 {
-		fmt.Println(Jaune("\nVous n'avez pas encore de Pokémon dans votre équipe."))
-		return
-	}
-
-	fmt.Println(Jaune("\nVotre équipe Pokémon :"))
-	for i, pokemon := range joueur.Equipe {
-		fmt.Printf(Jaune("%d. %s (Type: %s, Niveau: %d, PV: %d/%d, Attaque: %d, Exp: %d/%d)\n"),
-			i+1, pokemon.Nom, pokemon.Type, pokemon.Niveau, pokemon.PVActuels, pokemon.PVMax,
-			pokemon.Attaque, pokemon.Experience, pokemon.ExperienceToNextLevel)
 	}
 }
 

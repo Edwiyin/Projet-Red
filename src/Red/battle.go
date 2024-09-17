@@ -22,15 +22,6 @@ func poisonPot(pokemon *Pokemon) {
 		}
 	}
 }
-func (p *Pokemon) GainExperience(exp int) bool {
-	p.Experience += exp
-	if p.Experience >= p.Niveau*100 {
-		p.Experience = 0
-		p.Niveau++
-		return true
-	}
-	return false
-}
 
 func (p *Pokemon) Attaquer(cible *Pokemon) int {
 	damage := rand.Intn(10) + 1
@@ -156,69 +147,6 @@ func Combat(joueur *Dresseur) {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
 		time.Sleep(5 * time.Second)
 	}
-}
-
-func GenerateWildPokemon(joueur *Dresseur) Pokemon {
-    wildPokemons := []struct {
-        name        string
-        pokemonType PokemonType
-    }{
-        {"Rattata", Normal},
-        {"Pidgey", Flying},
-        {"Caterpie", Bug},
-        {"Weedle", Bug},
-        {"Pikachu", Electric},
-        {"Eevee", Normal},
-        {"Vulpix", Fire},
-        {"Jigglypuff", Normal},
-        {"Zubat", Flying},
-        {"Oddish", Grass},
-        {"Paras", Bug},
-        {"Venonat", Bug},
-        {"Meowth", Normal},
-        {"Psyduck", Water},
-        {"Mankey", Normal},
-        {"Growlithe", Fire},
-        {"Poliwag", Water},
-        {"Horsea", Water},
-        {"Goldeen", Water},
-        {"Staryu", Water},
-        {"Scyther", Bug},
-        {"Electabuzz", Electric},
-        {"Magmar", Fire},
-        {"Ronflex", Normal},
-        {"Dracaufeu", Fire},
-        {"Tortank", Water},
-        {"Florizarre", Grass},
-    }
-
-    maxLevel := 1
-    for _, pokemon := range joueur.Equipe {
-        if pokemon.Niveau > maxLevel {
-            maxLevel = pokemon.Niveau
-        }
-    }
-
-    var level int
-    if maxLevel <= 5 {
-        level = rand.Intn(3) + 1
-    } else {
-        minLevel := maxLevel - 2
-        maxLevel := maxLevel + 2
-        level = rand.Intn(maxLevel-minLevel+1) + minLevel
-    }
-
-    randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-    
-    return Pokemon{
-        Nom:        randomPokemon.name,
-        PVMax:      level * 10,
-        PVActuels:  level * 10,
-        Niveau:     level,
-        Type:       randomPokemon.pokemonType,
-        Experience: 0,
-        Attaque:    level * 5,
-    }
 }
 
 func UsePotion(joueur *Dresseur, pokemon *Pokemon) {

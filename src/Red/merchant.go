@@ -28,7 +28,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
 		fmt.Printf(Jaune("\nVotre solde: %d PokéDollars\n"), joueur.Argent)
-		fmt.Print(Vert("\nEntrez votre choix (1-5): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-6): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
 
