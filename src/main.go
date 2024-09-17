@@ -31,10 +31,7 @@ func init() {
 	if err != nil {
 		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
 	}
-	err = audioManager.LoadBattleMusic("assets/music/battle.mp3")
-	if err != nil {
-		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
-	}
+
 }
 func main() {
 	rand.Seed(time.Now().UnixNano())
