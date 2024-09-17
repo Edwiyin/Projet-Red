@@ -9,8 +9,6 @@ import (
 
 type PokemonType string
 
-const ()
-
 type Item struct {
 	Nom      string
 	Quantite int
@@ -18,6 +16,15 @@ type Item struct {
 
 func (p *Pokemon) Attaquer(cible *Pokemon) int {
 	damage := rand.Intn(10) + 1
+	cible.PVActuels -= damage
+	if cible.PVActuels < 0 {
+		cible.PVActuels = 0
+	}
+	return damage
+}
+
+func (p *Pokemon) AttaqueSpec(cible *Pokemon) int {
+	damage := SkillDamage[p.Type][cible.Type]
 	cible.PVActuels -= damage
 	if cible.PVActuels < 0 {
 		cible.PVActuels = 0
@@ -43,44 +50,133 @@ func Combat(joueur *Dresseur) {
 
 	for pokemonJoueur.EstVivant() && ennemi.EstVivant() {
 		fmt.Println(Jaune("\nQue voulez-vous faire ?"))
-		fmt.Println(Jaune("1. Attaquer"))
-		fmt.Println(Jaune("2. Utiliser une Potion de soin"))
-		fmt.Println(Jaune("3. Lancer une Pokéball"))
-		fmt.Println(Jaune("4. Utiliser une Potion de Poison"))
+		fmt.Println(Jaune("1. Attaque Normale"))
+		fmt.Println(Jaune("2. Attaque Spéciale"))
+		fmt.Println(Jaune("3. Utiliser une Potion"))
+		fmt.Println(Jaune("4. Lancer une Pokéball"))
 		fmt.Println(Jaune("5. Changer de Pokémon"))
 		fmt.Println(Jaune("6. Fuir"))
 
+		state := true
 		var choix int
 		fmt.Scan(&choix)
 
 		switch choix {
 		case 1:
-			damage := pokemonJoueur.Attaquer(&ennemi)
-			fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-			fmt.Println(Jaune(afficherBarrePV(ennemi)))
-			if ennemi.EstVivant() {
+			fmt.Println(Jaune("\nChoisissez une attaque :"))
+			fmt.Println(Jaune("1. Coup de Poing"))
+			fmt.Println(Jaune("2. Griffe"))
+			fmt.Println(Jaune("3. Charge"))
+			fmt.Println(Jaune("4. Morsure"))
+			fmt.Println(Jaune("5. Retour"))
+
+			fmt.Scan(&choix)
+			switch choix {
+			case 1:
+				damage := pokemonJoueur.Attaquer(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 2:
+				damage := pokemonJoueur.Attaquer(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 3:
+				damage := pokemonJoueur.Attaquer(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 4:
+				damage := pokemonJoueur.Attaquer(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 5:
+				fmt.Println(Jaune("Retour au combat..."))
+				state = false
+				time.Sleep(1 * time.Second)
+
+			default:
+				fmt.Println(Jaune("Choix invalide."))
+
+			}
+			if ennemi.EstVivant() && state {
 				damage := ennemi.Attaquer(pokemonJoueur)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
 				fmt.Println(Jaune(afficherBarrePV(*pokemonJoueur)))
 			}
 		case 2:
-			UsePotion(joueur, pokemonJoueur)
-			if ennemi.EstVivant() {
+			fmt.Println(Jaune("\nChoisissez une attaque spéciale :"))
+			fmt.Println(Jaune(fmt.Sprintf("1. %s", SkillName[pokemonJoueur.Type][0])))
+			fmt.Println(Jaune(fmt.Sprintf("2. %s", SkillName[pokemonJoueur.Type][1])))
+			fmt.Println(Jaune(fmt.Sprintf("3. %s", SkillName[pokemonJoueur.Type][2])))
+			fmt.Println(Jaune(fmt.Sprintf("4. %s", SkillName[pokemonJoueur.Type][3])))
+			fmt.Println(Jaune("5. Retour"))
+
+			fmt.Scan(&choix)
+			switch choix {
+			case 1:
+				damage := pokemonJoueur.AttaqueSpec(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 2:
+				damage := pokemonJoueur.AttaqueSpec(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 3:
+				damage := pokemonJoueur.AttaqueSpec(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 4:
+				damage := pokemonJoueur.AttaqueSpec(&ennemi)
+				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
+				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				state = true
+			case 5:
+				fmt.Println(Jaune("Retour au combat..."))
+				time.Sleep(1 * time.Second)
+				state = false
+
+			default:
+				fmt.Println(Jaune("Choix invalide."))
+			}
+			if ennemi.EstVivant() && state {
 				damage := ennemi.Attaquer(pokemonJoueur)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
 				fmt.Println(Jaune(afficherBarrePV(*pokemonJoueur)))
 			}
 		case 3:
+
+			fmt.Println(Jaune("\nChoisissez une potion :"))
+			fmt.Println(Jaune("1. Potion de Soin"))
+			fmt.Println(Jaune("2. Potion de Poison"))
+			fmt.Println(Jaune("3. Retour"))
+
+			fmt.Scan(&choix)
+			switch choix {
+			case 1:
+				UsePotion(joueur, pokemonJoueur)
+				state = true
+			case 2:
+				if UsePoisonPotion(joueur, pokemonJoueur) {
+				}
+				state = true
+			case 3:
+				fmt.Println(Jaune("Retour au combat..."))
+				time.Sleep(1 * time.Second)
+				state = false
+			default:
+				fmt.Println(Jaune("Choix invalide."))
+				state = false
+			}
+
+		case 4:
 			if TryToCatch(joueur, &ennemi) {
 				return
-			}
-		case 4:
-			if UsePoisonPotion(joueur, &ennemi) {
-				if ennemi.EstVivant() {
-					damage := ennemi.Attaquer(pokemonJoueur)
-					fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", ennemi.Nom, pokemonJoueur.Nom, damage)
-					fmt.Println(Jaune(afficherBarrePV(*pokemonJoueur)))
-				}
 			}
 		case 5:
 			nouveauPokemon := ChoisirPokemon(joueur)
@@ -93,14 +189,15 @@ func Combat(joueur *Dresseur) {
 				fmt.Println(Jaune(afficherBarrePV(ennemi)))
 			} else {
 				fmt.Println(Jaune("\nVous avez choisi le même Pokémon. Le combat continue."))
+				time.Sleep(3 * time.Second)
 			}
 		case 6:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
+			time.Sleep(3 * time.Second)
 			return
 		default:
 			fmt.Println(Jaune("Choix invalide."))
 		}
-
 		if !pokemonJoueur.EstVivant() {
 			nouveauPokemon := ChoisirPokemonVivant(joueur)
 			if nouveauPokemon != nil {
@@ -115,8 +212,8 @@ func Combat(joueur *Dresseur) {
 				fmt.Printf(Jaune("\nVous continuez le combat avec %s!\n"), pokemonJoueur.Nom)
 			}
 		}
-	}
 
+	}
 	if pokemonJoueur.EstVivant() {
 		expGained := ennemi.Niveau * 10
 		moneyGained := ennemi.Niveau * 50
@@ -262,16 +359,20 @@ func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
 			if item.Quantite > 0 {
 				healAmount := 20
 				pokemon.PVActuels += healAmount
-				if pokemon.PVActuels > pokemon.PVMax {
-					pokemon.PVActuels = pokemon.PVMax
+				if pokemon.PVActuels >= pokemon.PVMax {
+					if pokemon.PVActuels == pokemon.PVMax {
+						fmt.Printf(Jaune("\nVotre Pokémon est déjà en bonne santé \n: %d/%d"), pokemon.Nom, healAmount, pokemon.PVActuels, pokemon.PVMax)
+					} else {
+						joueur.Inventaire[i].Quantite--
+					}
+					fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré %d PV. PV actuels : %d/%d\n"), pokemon.Nom, healAmount, pokemon.PVActuels, pokemon.PVMax)
+					time.Sleep(3 * time.Second)
+				} else {
+					fmt.Println(Jaune("\nVous n'avez plus de Potions."))
 				}
-				joueur.Inventaire[i].Quantite--
-				fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré %d PV. PV actuels : %d/%d\n"), pokemon.Nom, healAmount, pokemon.PVActuels, pokemon.PVMax)
-			} else {
-				fmt.Println(Jaune("\nVous n'avez plus de Potions."))
+				return
 			}
-			return
 		}
+		fmt.Println(Jaune("\nVous n'avez pas de Potions dans votre inventaire."))
 	}
-	fmt.Println(Jaune("\nVous n'avez pas de Potions dans votre inventaire."))
 }
