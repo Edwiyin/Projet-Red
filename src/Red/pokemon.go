@@ -39,6 +39,13 @@ func GenerateWildPokemon(joueur *Dresseur) Pokemon {
         {"Weedle", Bug},
         {"Pikachu", Electric},
         {"Eevee", Normal},
+        {"Vaporeon", Water},
+        {"Jolteon", Electric},
+        {"Flareon", Fire},
+        {"Omanyte", Water},
+        {"Kabuto", Water},
+        {"Aerodactyl", Flying},
+        {"Snorlax", Normal},
         {"Vulpix", Fire},
         {"Jigglypuff", Normal},
         {"Zubat", Flying},
@@ -53,6 +60,7 @@ func GenerateWildPokemon(joueur *Dresseur) Pokemon {
         {"Horsea", Water},
         {"Goldeen", Water},
         {"Staryu", Water},
+        {"Magikarp", Water},        
         {"Scyther", Bug},
         {"Electabuzz", Electric},
         {"Magmar", Fire},
@@ -60,6 +68,7 @@ func GenerateWildPokemon(joueur *Dresseur) Pokemon {
         {"Dracaufeu", Fire},
         {"Tortank", Water},
         {"Florizarre", Grass},
+        
     }
 
     maxLevel := 1
