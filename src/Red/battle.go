@@ -188,19 +188,18 @@ func GenerateWildPokemon() Pokemon {
 		{"Dracaufeu", Fire},
 		{"Tortank", Water},
 		{"Florizarre", Grass},
+	}
 
-		}
-	
-		randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
-		level := rand.Intn(3) + 1
-		return Pokemon{
-			Nom:        randomPokemon.name,
-			PVActuels:  level * 10,
-			PVMax:      level * 10,
-			Niveau:     level,
-			Type:       randomPokemon.pokemonType,
-			Experience: 0,
-		}
+	randomPokemon := wildPokemons[rand.Intn(len(wildPokemons))]
+	level := rand.Intn(3) + 1
+	return Pokemon{
+		Nom:        randomPokemon.name,
+		PVActuels:  level * 10,
+		PVMax:      level * 10,
+		Niveau:     level,
+		Type:       randomPokemon.pokemonType,
+		Experience: 0,
+	}
 }
 
 func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
@@ -261,7 +260,7 @@ func ChoisirPokemon(joueur *Dresseur) *Pokemon {
 	var choix int
 	for {
 		fmt.Print(Vert("\nEntrez le numéro du Pokémon que vous voulez utiliser : "))
-		fmt.Scanln(&choix)
+		Wrap(func() { fmt.Scanln(&choix) })
 		if choix > 0 && choix <= len(joueur.Equipe) {
 			return &joueur.Equipe[choix-1]
 		}

@@ -26,7 +26,7 @@ func (am *AudioManager) Initialize() error {
 		return nil
 	}
 
-	err := speaker.Init(44100, 44100/10)
+	err := speaker.Init(44100, 44100/30)
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,6 @@ func (am *AudioManager) PlayBackgroundMusic() {
 	if am.backgroundMusic == nil {
 		return
 	}
-
 	speaker.Play(beep.Loop(-1, am.backgroundMusic))
 }
 

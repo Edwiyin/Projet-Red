@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+var audioManager *AudioManager
+
 func TakePot(item *Item, joueur *Dresseur) {
 	if item.Quantite > 0 {
 		for i := range joueur.Equipe {
@@ -42,7 +44,7 @@ func choixPokemonFunc(choixPokemon string) Pokemon {
 func creerDresseur(joueur *Dresseur) {
 	if joueur.Nom == "" {
 		fmt.Print(Vert("Entrez votre nom de dresseur : "))
-		fmt.Scanln(&joueur.Nom)
+		Wrap(func() { fmt.Scanln(&joueur.Nom) })
 
 		fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
 		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
@@ -51,7 +53,7 @@ func creerDresseur(joueur *Dresseur) {
 
 		var choixPokemon string
 		fmt.Print(Vert("Entrez votre choix (1-3) : "))
-		fmt.Scanln(&choixPokemon)
+		Wrap(func() { fmt.Scanln(&choixPokemon) })
 
 		pokemon := choixPokemonFunc(choixPokemon)
 		joueur.Equipe = append(joueur.Equipe, pokemon)
@@ -100,7 +102,7 @@ func AccessInventory(joueur *Dresseur) {
 
 		fmt.Print(Vert("\nEntrez votre choix : "))
 		var choix int
-		fmt.Scanln(&choix)
+		Wrap(func() { fmt.Scanln(&choix) })
 
 		if choix == len(joueur.Inventaire)+1 {
 			return
@@ -116,11 +118,12 @@ func AccessInventory(joueur *Dresseur) {
 		}
 
 		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
-		fmt.Scanln()
+		Wrap(func() { fmt.Scanln() })
 	}
 }
 
-func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
+func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
+	audioManager = newAudioManager
 	largeur := 50
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
@@ -133,7 +136,7 @@ func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
 	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
-	fmt.Scanln()
+	Wrap(func() { fmt.Scanln() })
 	for {
 		largeur := 50
 		fmt.Print("\033[2J")
@@ -156,7 +159,7 @@ func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
 
 		fmt.Print(Vert("\nEntrez votre choix (1-6): "))
 		var choix string
-		fmt.Scanln(&choix)
+		Wrap(func() { fmt.Scanln(&choix) })
 
 		switch choix {
 		case "1":
@@ -181,7 +184,7 @@ func MenuPrincipal(joueur *Dresseur, audioManager *AudioManager) {
 		}
 
 		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
-		fmt.Scanln()
+		Wrap(func() { fmt.Scanln() })
 	}
 }
 
@@ -208,7 +211,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		fmt.Printf(Jaune("\nVotre solde: %d PokéDollars\n"), joueur.Argent)
 		fmt.Print(Vert("\nEntrez votre choix (1-5): "))
 		var choix string
-		fmt.Scanln(&choix)
+		Wrap(func() { fmt.Scanln(&choix) })
 
 		switch choix {
 		case "1":
@@ -226,7 +229,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		}
 
 		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
-		fmt.Scanln()
+		Wrap(func() { fmt.Scanln() })
 	}
 }
 
@@ -256,7 +259,7 @@ func VendreObjet(joueur *Dresseur) {
 
 	var choix int
 	fmt.Print(Vert("\nEntrez votre choix : "))
-	fmt.Scanln(&choix)
+	Wrap(func() { fmt.Scanln(&choix) })
 
 	if choix > 0 && choix <= len(joueur.Inventaire) {
 		item := &joueur.Inventaire[choix-1]
