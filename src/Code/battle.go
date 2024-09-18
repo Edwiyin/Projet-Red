@@ -8,14 +8,13 @@ import (
 )
 
 func afficherBarrePV(pokemon Pokemon) string {
-    barreLength := 20
-    pvRatio := float64(pokemon.PVActuels) / float64(pokemon.PVMax)
-    pvActuels := int(pvRatio * float64(barreLength))
+	barreLength := 20
+	pvRatio := float64(pokemon.PVActuels) / float64(pokemon.PVMax)
+	pvActuels := int(pvRatio * float64(barreLength))
 
-    barre := strings.Repeat("█", pvActuels) + strings.Repeat("░", barreLength-pvActuels)
-    return fmt.Sprintf("%s [%s] %d/%d", pokemon.Nom, barre, pokemon.PVActuels, pokemon.PVMax)
+	barre := strings.Repeat("█", pvActuels) + strings.Repeat("░", barreLength-pvActuels)
+	return fmt.Sprintf("%s [%s] %d/%d", pokemon.Nom, barre, pokemon.PVActuels, pokemon.PVMax)
 }
-
 
 func (p *Pokemon) Attaquer(cible *Pokemon) int {
 	damage := rand.Intn(10) + 1
@@ -55,6 +54,8 @@ func Combat(joueur *Dresseur) {
 	}
 	pokemonJoueur := ChoisirPokemon(joueur)
 	ennemi := GenerateWildPokemon(joueur)
+
+	fmt.Println(PokeArt[ennemi.Nom])
 
 	fmt.Printf(Jaune("\nUn %s sauvage de niveau %d apparaît!\n"), ennemi.Nom, ennemi.Niveau)
 	fmt.Printf(Jaune("Vous envoyez %s au combat!\n"), pokemonJoueur.Nom)
@@ -236,8 +237,8 @@ func Combat(joueur *Dresseur) {
 			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
 		}
 		ressourceWon := TypeToResource[ennemi.Type]
-        quantiteWon := rand.Intn(3) + 1 
-        
+		quantiteWon := rand.Intn(3) + 1
+
 		joueur.AddResource(ressourceWon, quantiteWon)
 		fmt.Printf(Jaune("Vous avez gagné %d %s!\n"), quantiteWon, ressourceWon)
 		time.Sleep(6 * time.Second)
