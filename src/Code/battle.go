@@ -226,7 +226,7 @@ func Combat(joueur *Dresseur) {
 
 	}
 	if pokemonJoueur.EstVivant() {
-		expGained := ennemi.Niveau * 10
+		expGained := ennemi.Niveau * 20
 		moneyGained := ennemi.Niveau * 50
 		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
 		fmt.Printf(Jaune("Vous avez gagné %d PokéDollars!\n"), moneyGained)
@@ -240,6 +240,7 @@ func Combat(joueur *Dresseur) {
         
 		joueur.AddResource(ressourceWon, quantiteWon)
 		fmt.Printf(Jaune("Vous avez gagné %d %s!\n"), quantiteWon, ressourceWon)
+		time.Sleep(6 * time.Second)
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
 		time.Sleep(5 * time.Second)

@@ -32,9 +32,9 @@ func VisiterForgeron(joueur *Dresseur) {
 		}
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
-		AfficherLigneMenu("1. Fabriquer un Casque (50 PokéDollars,Fourrure)", largeur)
-		AfficherLigneMenu("2. Fabriquer une Armure (50 PokéDollars,Écaille)", largeur)
-		AfficherLigneMenu("3. Fabriquer des Bottes (50 PokéDollars,Plume)", largeur)
+		AfficherLigneMenu("1. Fabriquer un Casque (50 PokéDollars)[Fourrure:2 , Écaille:1]", largeur)
+		AfficherLigneMenu("2. Fabriquer une Armure (50 PokéDollars)[Écaille: 3, Charbon: 1]", largeur)
+		AfficherLigneMenu("3. Fabriquer des Bottes (50 PokéDollars)[Plume: 2, Carapace: 1]", largeur)
 		AfficherLigneMenu("4. Retour au menu principal", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))

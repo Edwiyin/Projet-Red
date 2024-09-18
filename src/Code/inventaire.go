@@ -58,7 +58,7 @@ func AccessInventory(joueur *Dresseur) {
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
-		AfficherLigneMenu(fmt.Sprintf("                                                      4  Porte-Monnaie: %d PokéDollars", joueur.Argent), largeur)
+		AfficherLigneMenu(fmt.Sprintf("                                                        Porte-Monnaie: %d PokéDollars", joueur.Argent), largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
 		for i, item := range joueur.Inventaire {
