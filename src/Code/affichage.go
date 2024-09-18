@@ -30,6 +30,5 @@ func AfficherCadre(largeur int) {
 
 func AfficherLigneMenu(texte string, largeur int) {
 	espaces := largeur - len([]rune(texte)) - 6
-
 	fmt.Printf("%s║ %s%s ║%s\n", Jaune("║"), Jaune(texte), strings.Repeat(" ", espaces), Jaune("║"))
 }

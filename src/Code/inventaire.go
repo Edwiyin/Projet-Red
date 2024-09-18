@@ -51,14 +51,14 @@ func AccessInventory(joueur *Dresseur) {
 		fmt.Print("\033[H")
 		AfficherTitre()
 
-		largeur := 50
+		largeur := 155
 		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
 		AfficherLigneMenu("", largeur)
-		AfficherLigneMenu("        INVENTAIRE", largeur)
+		AfficherLigneMenu("                                                                  INVENTAIRE", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
-		AfficherLigneMenu(fmt.Sprintf("Solde: %d PokéDollars", joueur.Argent), largeur)
+		AfficherLigneMenu(fmt.Sprintf("                                                      4  Porte-Monnaie: %d PokéDollars", joueur.Argent), largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
 		for i, item := range joueur.Inventaire {
@@ -78,6 +78,8 @@ func AccessInventory(joueur *Dresseur) {
 			item := &joueur.Inventaire[choix-1]
 			if item.Nom == "Potion" {
 				TakePot((*Item)(item), joueur)
+			} else if item.Nom == "Casque" || item.Nom == "Armure" || item.Nom == "Bottes" {
+				EquiperObjet(joueur, item)
 			} else {
 				fmt.Printf(Jaune("\nVous ne pouvez pas utiliser %s pour le moment.\n"), item.Nom)
 			}
@@ -90,3 +92,18 @@ func AccessInventory(joueur *Dresseur) {
 	}
 }
 
+func EquiperObjet(joueur *Dresseur, item *InventoryItem) {
+	var emplacement string
+	switch item.Nom {
+	case "Casque":
+		emplacement = "Tête"
+	case "Armure":
+		emplacement = "Torse"
+	case "Bottes":
+		emplacement = "Pieds"
+	}
+
+	equipement := Equipment{Nom: item.Nom, Emplacement: emplacement, BonusPV: 10}
+	joueur.EquiperEquipement(equipement)
+	fmt.Printf(Jaune("\nVous avez équipé %s.\n"), item.Nom)
+}

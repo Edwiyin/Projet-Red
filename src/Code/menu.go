@@ -32,40 +32,42 @@ func creerDresseur(joueur *Dresseur) {
 
 func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 	audioManager = newAudioManager
-	largeur := 50
+	largeur := 155
+	joueur.Argent += 100
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
 	AfficherTitre()
 
 	fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
 	AfficherLigneMenu("", largeur)
-	AfficherLigneMenu("        NEW GAME", largeur)
+	AfficherLigneMenu("                                                                  NEW GAME", largeur)
 	AfficherLigneMenu("", largeur)
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
 	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
 	Wrap(func() { fmt.Scanln() })
 	for {
-		largeur := 50
+		largeur := 155
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")
 		AfficherTitre()
 
 		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
 		AfficherLigneMenu("", largeur)
-		AfficherLigneMenu("        MENU PRINCIPAL", largeur)
+		AfficherLigneMenu("                                                              MENU PRINCIPAL", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("1. Créer Dresseur  ", largeur)
 		AfficherLigneMenu("2. Afficher les informations du dresseur", largeur)
 		AfficherLigneMenu("3. Accéder à l'inventaire  ", largeur)
-		AfficherLigneMenu("4. Combat", largeur)
-		AfficherLigneMenu("5. Visiter le marchand", largeur)
-		AfficherLigneMenu("6. Quitter", largeur)
+		AfficherLigneMenu("4. Combatre un Pokémon Sauvage", largeur)
+		AfficherLigneMenu("5. Visiter le Marchand", largeur)
+		AfficherLigneMenu("6. Visiter le Forgeron", largeur)
+		AfficherLigneMenu("7. Quitter le Jeu", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Print(Vert("\nEntrez votre choix (1-6): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-7): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
 
@@ -86,6 +88,8 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		case "5":
 			VisiteMarchand(joueur)
 		case "6":
+			VisiterForgeron(joueur)
+		case "7":
 			fmt.Println(Jaune("\nMerci d'avoir joué. Au revoir!"))
 			os.Exit(0)
 		default:
@@ -96,3 +100,4 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		Wrap(func() { fmt.Scanln() })
 	}
 }
+

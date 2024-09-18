@@ -8,14 +8,14 @@ import (
 
 func VisiteMarchand(joueur *Dresseur) {
 	for {
-		largeur := 60
+		largeur := 155
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")
 		AfficherTitre()
 
 		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
 		AfficherLigneMenu("", largeur)
-		AfficherLigneMenu("        BOUTIQUE DU MARCHAND", largeur)
+		AfficherLigneMenu("                                                           BOUTIQUE DU MARCHAND", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("1. Acheter une Potion (50 PokéDollars)", largeur)
@@ -27,7 +27,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Printf(Jaune("\nVotre solde: %d PokéDollars\n"), joueur.Argent)
+		fmt.Printf(Jaune("\nVotre Porte-Monnaie: %d PokéDollars\n"), joueur.Argent)
 		fmt.Print(Vert("\nEntrez votre choix (1-6): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })

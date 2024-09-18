@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	gokemon "gokemon/Red"
+	gokemon "gokemon/Code"
 	"math/rand"
 	"time"
 )

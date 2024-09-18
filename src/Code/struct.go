@@ -95,9 +95,20 @@ type Dresseur struct {
 	Nom        string
 	Equipe     []Pokemon
 	Inventaire []InventoryItem
-	Argent    int
+	Argent     int
+	Ressources []Resource
+	Equipement struct {
+		Tete  Equipment
+		Torse Equipment
+		Pieds Equipment
+	}
 }
 
+type Equipment struct {
+	Nom        string
+	Emplacement string
+	BonusPV    int
+}
 func (p *Pokemon) IsAlive() bool {
 	return p.PVActuels > 0
 }
@@ -140,4 +151,89 @@ func NewPokemon(nom string, pokemonType PokemonType, niveau int) Pokemon {
 		Experience:            0,
 		ExperienceToNextLevel: 100,
 	}
+}
+
+func (d *Dresseur) EquiperEquipement(equipement Equipment) {
+	var ancienEquipement Equipment
+	switch equipement.Emplacement {
+	case "Tête":
+		ancienEquipement = d.Equipement.Tete
+		d.Equipement.Tete = equipement
+	case "Torse":
+		ancienEquipement = d.Equipement.Torse
+		d.Equipement.Torse = equipement
+	case "Pieds":
+		ancienEquipement = d.Equipement.Pieds
+		d.Equipement.Pieds = equipement
+	}
+	for i, item := range d.Inventaire {
+		if item.Nom == equipement.Nom && item.Quantite > 0 {
+			d.Inventaire[i].Quantite--
+			if d.Inventaire[i].Quantite == 0 {
+				d.Inventaire = append(d.Inventaire[:i], d.Inventaire[i+1:]...)
+			}
+			break
+		}
+	}
+
+	if ancienEquipement.Nom != "" {
+		d.Inventaire = append(d.Inventaire, InventoryItem{Nom: ancienEquipement.Nom, Quantite: 1})
+	}
+
+	for i := range d.Equipe {
+		d.Equipe[i].PVMax += equipement.BonusPV
+		if d.Equipe[i].PVActuels > d.Equipe[i].PVMax {
+			d.Equipe[i].PVActuels = d.Equipe[i].PVMax
+		}
+	}
+}
+
+type Resource struct {
+    Nom      string
+    Quantite int
+}
+
+var TypeToResource = map[PokemonType]string{
+    Normal:   "Fourrure",
+    Fire:     "Charbon",
+    Water:    "Écaille",
+    Grass:    "Feuille",
+    Electric: "Batterie",
+    Flying:   "Plume",
+    Bug:      "Carapace",
+}
+
+type CraftingRecipe struct {
+    Nom         string
+    Ressources  map[string]int
+    CoutArgent  int
+}
+
+var CraftingRecipes = map[string]CraftingRecipe{
+    "Casque": {
+        Nom:        "Casque",
+        Ressources: map[string]int{"Fourrure": 2, "Écaille": 1},
+        CoutArgent: 50,
+    },
+    "Armure": {
+        Nom:        "Armure",
+        Ressources: map[string]int{"Écaille": 3, "Charbon": 1},
+        CoutArgent: 50,
+    },
+    "Bottes": {
+        Nom:        "Bottes",
+        Ressources: map[string]int{"Plume": 2, "Carapace": 1},
+        CoutArgent: 50,
+    },
+}
+
+func (d *Dresseur) AddResource(resource string, quantite int) {
+    for i, item := range d.Inventaire {
+        if item.Nom == resource {
+            d.Inventaire[i].Quantite += quantite
+            return
+        }
+    }
+   
+    d.Inventaire = append(d.Inventaire, InventoryItem{Nom: resource, Quantite: quantite})
 }
