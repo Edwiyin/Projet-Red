@@ -5,33 +5,6 @@ import (
 	"time"
 )
 
-func poisonPot(enemy *Pokemon) {
-	poisonDamage := 7
-	enemy.PVActuels -= poisonDamage
-	time.Sleep(1 * time.Second)
-	if enemy.PVActuels < 0 {
-		enemy.PVActuels = 0
-	}
-	fmt.Printf(Jaune("\n%s a été empoisonné et perd %d PV. PV actuels : %d/%d\n"), enemy.Nom, poisonDamage, enemy.PVActuels, enemy.PVMax)
-}
-
-func UsePoisonPotion(joueur *Dresseur, pokemon *Pokemon) bool {
-	for i, item := range joueur.Inventaire {
-		if item.Nom == "Potion de Poison" {
-			if item.Quantite > 0 {
-				joueur.Inventaire[i].Quantite--
-				poisonPot(pokemon)
-				return true
-			} else {
-				fmt.Println(Jaune("\nVous n'avez plus de Potions de Poison."))
-				return false
-			}
-		}
-	}
-	fmt.Println(Jaune("\nVous n'avez pas de Potions de Poison dans votre inventaire."))
-	return false
-}
-
 func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
     for i, item := range joueur.Inventaire {
         if item.Nom == "Potion de Soin" {
@@ -46,7 +19,8 @@ func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
                     pokemon.PVActuels = pokemon.PVMax
                 }
                 joueur.Inventaire[i].Quantite--
-                fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré %d PV. PV actuels : %d/%d\n"), pokemon.Nom, healAmount, pokemon.PVActuels, pokemon.PVMax)
+                fmt.Printf(Jaune("\nVous avez utilisé une Potion. %s a récupéré %d PV. "), pokemon.Nom, healAmount)
+				fmt.Println(Jaune(afficherBarrePV(*pokemon)))
             } else {
                 fmt.Println(Jaune("\nVous n'avez plus de Potions."))
             }
@@ -54,4 +28,32 @@ func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
         }
     }
     fmt.Println(Jaune("\nVous n'avez pas de Potions dans votre inventaire."))
+}
+
+func PoisonPot(enemy *Pokemon) {
+	poisonDamage := 7
+	enemy.PVActuels -= poisonDamage
+	time.Sleep(1 * time.Second)
+	if enemy.PVActuels < 0 {
+		enemy.PVActuels = 0
+	}
+	fmt.Printf(Jaune("\n%s a été empoisonné et perd %d PV."), enemy.Nom, poisonDamage)
+	fmt.Println(Jaune(afficherBarrePV(*enemy)))
+}
+
+func UsePoisonPotion(joueur *Dresseur, pokemon *Pokemon) bool {
+	for i, item := range joueur.Inventaire {
+		if item.Nom == "Potion de Poison" {
+			if item.Quantite > 0 {
+				joueur.Inventaire[i].Quantite--
+				PoisonPot(pokemon)
+				return true
+			} else {
+				fmt.Println(Jaune("\nVous n'avez plus de Potions de Poison."))
+				return false
+			}
+		}
+	}
+	fmt.Println(Jaune("\nVous n'avez pas de Potions de Poison dans votre inventaire."))
+	return false
 }
