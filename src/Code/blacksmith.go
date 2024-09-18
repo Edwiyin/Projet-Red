@@ -5,10 +5,6 @@ import (
 	"strings"
 )
 
-
-
-
-
 func VisiterForgeron(joueur *Dresseur) {
 	for {
 		fmt.Print("\033[2J")
@@ -64,6 +60,15 @@ func VisiterForgeron(joueur *Dresseur) {
 }
 
 func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
+
+	equipements := []Equipment{joueur.Equipement.Tete, joueur.Equipement.Torse, joueur.Equipement.Pieds}
+	for _, equip := range equipements {
+		if equip.Nom == nom {
+			fmt.Printf(Jaune("\nVous avez déjà équipé %s. Vous ne pouvez pas en fabriquer un autre.\n"), nom)
+			return
+		}
+	}
+
 	recette, existe := CraftingRecipes[nom]
 	if !existe {
 		fmt.Println(Jaune("\nRecette introuvable."))
@@ -107,7 +112,8 @@ func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
 		}
 	}
 
-	joueur.Inventaire = append(joueur.Inventaire, InventoryItem{Nom: nom, Quantite: 1})
+	nouvelEquipement := Equipment{Nom: nom, Emplacement: emplacement, BonusPV: 10, BonusAttack: 5}
+	joueur.EquiperEquipement(nouvelEquipement)
 
-	fmt.Printf(Jaune("\nVous avez fabriqué un(e) %s pour %d PokéDollars et les ressources nécessaires.\n"), nom, recette.CoutArgent)
+	fmt.Printf(Jaune("\nVous avez fabriqué et équipé un(e) %s pour %d PokéDollars et les ressources nécessaires.\n"), nom, recette.CoutArgent)
 }

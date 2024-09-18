@@ -39,7 +39,7 @@ func GenerateWildPokemon(joueur *Dresseur) Pokemon {
 		{"Pikachu", Electric},
 		{"Rondoudou", Normal},
 		{"Dracaufeu", Fire},
-		{"léviator", Water},
+		{"Léviator", Water},
 		{"Goupix", Fire},
 		{"Gyarados", Water},
 		{"Mewtwo", Electric},
