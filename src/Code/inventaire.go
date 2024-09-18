@@ -103,7 +103,7 @@ func EquiperObjet(joueur *Dresseur, item *InventoryItem) {
 		emplacement = "Pieds"
 	}
 
-	equipement := Equipment{Nom: item.Nom, Emplacement: emplacement, BonusPV: 10}
+	equipement := Equipment{Nom: item.Nom, Emplacement: emplacement, BonusPV: 10, BonusAttack: 5}
 	joueur.EquiperEquipement(equipement)
 	fmt.Printf(Jaune("\nVous avez équipé %s.\n"), item.Nom)
 }

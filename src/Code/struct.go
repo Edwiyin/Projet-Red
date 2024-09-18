@@ -108,6 +108,7 @@ type Equipment struct {
 	Nom        string
 	Emplacement string
 	BonusPV    int
+	BonusAttack int
 }
 func (p *Pokemon) IsAlive() bool {
 	return p.PVActuels > 0
@@ -182,6 +183,7 @@ func (d *Dresseur) EquiperEquipement(equipement Equipment) {
 
 	for i := range d.Equipe {
 		d.Equipe[i].PVMax += equipement.BonusPV
+		d.Equipe[i].Attaque += equipement.BonusAttack
 		if d.Equipe[i].PVActuels > d.Equipe[i].PVMax {
 			d.Equipe[i].PVActuels = d.Equipe[i].PVMax
 		}
