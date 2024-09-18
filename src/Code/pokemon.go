@@ -5,26 +5,25 @@ import (
 	"math/rand"
 )
 
-func choixPokemonFunc(choixPokemon string) Pokemon {
-	switch choixPokemon {
+func choixPokemonFunc(choix string) *Pokemon {
+	switch choix {
 	case "1":
 		pokemon := NewPokemon("Bulbizarre", Grass, 1)
 		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
+		return &pokemon
 	case "2":
 		pokemon := NewPokemon("Salamèche", Fire, 1)
 		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
+		return &pokemon
 	case "3":
 		pokemon := NewPokemon("Carapuce", Water, 1)
 		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
+		return &pokemon
 	default:
 		fmt.Println(Jaune("Choix invalide. Pokémon par défaut : Pikachu"))
 		pokemon := NewPokemon("Pikachu", Electric, 1)
 		pokemon.PVActuels = pokemon.PVMax / 2
-		return pokemon
-
+		return &pokemon
 	}
 }
 

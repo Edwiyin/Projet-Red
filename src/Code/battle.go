@@ -232,16 +232,17 @@ func Combat(joueur *Dresseur) {
 		fmt.Printf(Jaune("\nVous avez gagné le combat! %s gagne %d points d'expérience.\n"), pokemonJoueur.Nom, expGained)
 		fmt.Printf(Jaune("Vous avez gagné %d PokéDollars!\n"), moneyGained)
 		joueur.Argent += moneyGained
-		time.Sleep(6 * time.Second)
+		time.Sleep(3 * time.Second)
 		if pokemonJoueur.GainExperience(expGained) {
 			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
+			time.Sleep(3 * time.Second)
 		}
 		ressourceWon := TypeToResource[ennemi.Type]
 		quantiteWon := rand.Intn(3) + 1
 
 		joueur.AddResource(ressourceWon, quantiteWon)
 		fmt.Printf(Jaune("Vous avez gagné %d %s!\n"), quantiteWon, ressourceWon)
-		time.Sleep(6 * time.Second)
+		time.Sleep(3 * time.Second)
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
 		time.Sleep(5 * time.Second)
@@ -258,7 +259,7 @@ func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 				if rand.Float64() < catchChance {
 					joueur.Equipe = append(joueur.Equipe, *pokemon)
 					fmt.Printf(Jaune("\nFélicitations! Vous avez capturé %s!\n"), pokemon.Nom)
-					time.Sleep(5 * time.Second)
+					time.Sleep(4 * time.Second)
 					return true
 				} else {
 					fmt.Println(Jaune("\nLe Pokémon s'est échappé de la Pokéball!"))

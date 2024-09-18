@@ -4,6 +4,11 @@ import (
 	"math/rand"
 )
 
+const CapaciteInventaireInitiale = 10
+const LimiteInvInitiale = 10
+const AugmentationInv = 10
+const MaxAugmentationsInv = 5
+
 const (
 	Normal   PokemonType = "Normal"
 	Fire     PokemonType = "Fire"
@@ -12,7 +17,6 @@ const (
 	Electric PokemonType = "Electric"
 	Flying   PokemonType = "Flying"
 	Bug      PokemonType = "Bug"
-
 )
 
 var typeEffectiveness = map[PokemonType]map[PokemonType]float64{
@@ -73,7 +77,6 @@ var SkillDamage = map[PokemonType]map[PokemonType]int{
 	},
 }
 
-
 type Pokemon struct {
 	Nom                   string
 	PVActuels             int
@@ -102,6 +105,8 @@ type Dresseur struct {
 		Torse Equipment
 		Pieds Equipment
 	}
+	CapaciteInventaire int
+	NombreAugmentationsInv int
 }
 
 type Equipment struct {
@@ -110,6 +115,7 @@ type Equipment struct {
 	BonusPV    int
 	BonusAttack int
 }
+
 func (p *Pokemon) IsAlive() bool {
 	return p.PVActuels > 0
 }
@@ -124,6 +130,7 @@ func (p *Pokemon) Attack(cible *Pokemon) int {
 	}
 	return damage
 }
+
 func (p *Pokemon) LevelUp() {
 	p.Niveau++
 	p.PVMax += rand.Intn(3) + 2

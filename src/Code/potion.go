@@ -31,14 +31,20 @@ func UsePotion(joueur *Dresseur, pokemon *Pokemon) {
 }
 
 func PoisonPot(enemy *Pokemon) {
-	poisonDamage := 7
-	enemy.PVActuels -= poisonDamage
-	time.Sleep(1 * time.Second)
-	if enemy.PVActuels < 0 {
-		enemy.PVActuels = 0
+	fmt.Printf(Jaune("\nLa Potion de Poison affecte %s !\n"), enemy.Nom)
+	for i := 0; i < 3; i++ {
+		time.Sleep(1 * time.Second)
+		enemy.PVActuels -= 7
+		if enemy.PVActuels < 0 {
+			enemy.PVActuels = 0
+		}
+		fmt.Printf(Jaune("%s subit 7 points de dégâts."), enemy.Nom)
+		fmt.Println(Jaune(afficherBarrePV(*enemy)))
+		if enemy.PVActuels == 0 {
+			fmt.Printf(Jaune("%s est K.O. !\n"), enemy.Nom)
+			break
+		}
 	}
-	fmt.Printf(Jaune("\n%s a été empoisonné et perd %d PV."), enemy.Nom, poisonDamage)
-	fmt.Println(Jaune(afficherBarrePV(*enemy)))
 }
 
 func UsePoisonPotion(joueur *Dresseur, pokemon *Pokemon) bool {

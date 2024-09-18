@@ -13,7 +13,7 @@ func Jaune(texte string) string {
 }
 
 func Vert(texte string) string {
-	return texte
+	return "\033[32m" + texte + "\033[0m"
 }
 
 func Rouge(texte string) string {

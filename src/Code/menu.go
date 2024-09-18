@@ -4,27 +4,58 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"unicode"
 )
 
 var audioManager *AudioManager
 
-func creerDresseur(joueur *Dresseur) {
+func charCreation() *Dresseur {
+	var nom string
+	var nomValide bool
+
+	for !nomValide {
+		fmt.Print(Vert("Entrez votre nom de dresseur (lettres uniquement) : "))
+		Wrap(func() { fmt.Scanln(&nom) })
+
+		nomValide = true
+		for _, char := range nom {
+			if !unicode.IsLetter(char) {
+				nomValide = false
+				fmt.Println(Jaune("Le nom doit contenir uniquement des lettres. Veuillez réessayer."))
+				break
+			}
+		}
+
+		if nomValide && len(nom) > 0 {
+			nom = strings.ToLower(nom)
+			nom = strings.Title(nom)
+		} else if len(nom) == 0 {
+			nomValide = false
+			fmt.Println(Jaune("Le nom ne peut pas être vide. Veuillez réessayer."))
+		}
+	}
+
+	joueur := &Dresseur{Nom: nom}
+
+	fmt.Print(Vert("Entrez votre choix (1-3) : "))
+	fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
+	fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
+	fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
+	fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
+	var choixPokemon string
+	Wrap(func() { fmt.Scanln(&choixPokemon) })
+
+	pokemon := choixPokemonFunc(choixPokemon)
+	joueur.Equipe = append(joueur.Equipe, *pokemon)
+	joueur.Argent = 100
+	fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
+
+	return joueur
+}
+
+func createCharacter(joueur *Dresseur) {
 	if joueur.Nom == "" {
-		fmt.Print(Vert("Entrez votre nom de dresseur : "))
-		Wrap(func() { fmt.Scanln(&joueur.Nom) })
-
-		fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
-		fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
-		fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
-		fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
-
-		var choixPokemon string
-		fmt.Print(Vert("Entrez votre choix (1-3) : "))
-		Wrap(func() { fmt.Scanln(&choixPokemon) })
-
-		pokemon := choixPokemonFunc(choixPokemon)
-		joueur.Equipe = append(joueur.Equipe, pokemon)
-		fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
+		*joueur = *charCreation()
 	} else {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
 	}
@@ -33,7 +64,6 @@ func creerDresseur(joueur *Dresseur) {
 func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 	audioManager = newAudioManager
 	largeur := 155
-	joueur.Argent += 100
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
 	AfficherTitre()
@@ -69,13 +99,13 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Print(Vert("\nEntrez votre choix (1-8): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-9): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
 
 		switch choix {
 		case "1":
-			creerDresseur(joueur)
+			createCharacter(joueur)
 		case "2":
 			if joueur.Nom == "" {
 				fmt.Println(Jaune("\nVeuillez d'abord créer votre dresseur."))
@@ -95,7 +125,7 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		case "8":
 			MessageRapide(("Abba"), 3, "bleu")
 			MessageRapide(("Steven Spielberg"), 3, "bleu")
-			MessageRapide(("Les développeurs de ce jeu sont: Massinissa Ahfir, Edwin Wehbe, Michel Mustafaov"), 3,	"bleu")
+			MessageRapide(("Les développeurs de ce jeu sont: Massinissa Ahfir, Edwin Wehbe, Michel Mustafaov"), 3, "bleu")
 		case "9":
 			fmt.Println(Jaune("\nMerci d'avoir joué. Au revoir!"))
 			os.Exit(0)
@@ -108,31 +138,5 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 	}
 }
 
-func AfficherEquipements(joueur *Dresseur) {
-	largeur := 155
-	fmt.Print("\033[2J")
-	fmt.Print("\033[H")
-	AfficherTitre()
 
-	fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
-	AfficherLigneMenu("", largeur)
-	AfficherLigneMenu("                                                              ÉQUIPEMENTS", largeur)
-	AfficherLigneMenu("", largeur)
-	fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 
-	if joueur.Equipement.Tete == (Equipment{}) && joueur.Equipement.Torse == (Equipment{}) && joueur.Equipement.Pieds == (Equipment{}) {
-		AfficherLigneMenu("Vous n'avez pas d'équipements pour le moment.", largeur)
-	} else {
-		equipements := []Equipment{joueur.Equipement.Tete, joueur.Equipement.Torse, joueur.Equipement.Pieds}
-		for _, equip := range equipements {
-			AfficherLigneMenu(fmt.Sprintf("%s - Emplacement: %s, Bonus PV: %d, Bonus Attaque: %d", 
-				equip.Nom, equip.Emplacement, equip.BonusPV, equip.BonusAttack), largeur)
-		}
-	}
-
-	AfficherLigneMenu("", largeur)
-	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
-
-	fmt.Print(Vert("\nAppuyez sur Entrée pour revenir au menu principal..."))
-	Wrap(func() { fmt.Scanln() })
-}

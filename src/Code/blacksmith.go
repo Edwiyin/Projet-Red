@@ -60,11 +60,11 @@ func VisiterForgeron(joueur *Dresseur) {
 }
 
 func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
-
+	
 	equipements := []Equipment{joueur.Equipement.Tete, joueur.Equipement.Torse, joueur.Equipement.Pieds}
 	for _, equip := range equipements {
-		if equip.Nom == nom {
-			fmt.Printf(Jaune("\nVous avez déjà équipé %s. Vous ne pouvez pas en fabriquer un autre.\n"), nom)
+		if equip.Emplacement == emplacement {
+			fmt.Printf(Jaune("\nVous avez déjà équipé un %s. Vous ne pouvez pas en fabriquer un autre.\n"), nom)
 			return
 		}
 	}
@@ -94,7 +94,7 @@ func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
 		}
 	}
 
-	if len(joueur.Inventaire) >= LimiteInv {
+	if len(joueur.Inventaire) >= joueur.CapaciteInventaire {
 		fmt.Println(Jaune("\nVotre inventaire est plein. Vous ne pouvez pas fabriquer cet équipement."))
 		return
 	}
@@ -112,8 +112,22 @@ func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
 		}
 	}
 
-	nouvelEquipement := Equipment{Nom: nom, Emplacement: emplacement, BonusPV: 10, BonusAttack: 5}
+	var bonusPV, bonusAttack int
+	switch emplacement {
+	case "Tête":
+		bonusPV = 15
+		bonusAttack = 5
+	case "Torse":
+		bonusPV = 25
+		bonusAttack = 10
+	case "Pieds":
+		bonusPV = 10
+		bonusAttack = 15
+	}
+
+	nouvelEquipement := Equipment{Nom: nom, Emplacement: emplacement, BonusPV: bonusPV, BonusAttack: bonusAttack}
 	joueur.EquiperEquipement(nouvelEquipement)
 
 	fmt.Printf(Jaune("\nVous avez fabriqué et équipé un(e) %s pour %d PokéDollars et les ressources nécessaires.\n"), nom, recette.CoutArgent)
+	fmt.Printf(Jaune("Bonus : PV +%d, Attaque +%d\n"), bonusPV, bonusAttack)
 }
