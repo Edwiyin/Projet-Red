@@ -10,6 +10,7 @@ import (
 
 type AudioManager struct {
 	backgroundMusic beep.StreamSeekCloser
+	battleMusic     beep.StreamSeekCloser
 	soundEffects    map[string]*beep.Buffer
 	format          beep.Format
 	initialized     bool
@@ -61,8 +62,11 @@ func (am *AudioManager) PlayBackgroundMusic() {
 		return
 	}
 	speaker.Play(beep.Loop(-1, am.backgroundMusic))
-}
 
+}
+func (am *AudioManager) StopMusic() {
+	speaker.Clear()
+}
 func (am *AudioManager) LoadSoundEffect(name, filename string) error {
 	if err := am.Initialize(); err != nil {
 		return err
@@ -93,9 +97,6 @@ func (am *AudioManager) PlaySoundEffect(name string) {
 	}
 }
 func (am *AudioManager) LoadBattleMusic(assets string) error {
-	if err := am.Initialize(); err != nil {
-		return err
-	}
 
 	f, err := os.Open(assets)
 	if err != nil {
@@ -108,14 +109,14 @@ func (am *AudioManager) LoadBattleMusic(assets string) error {
 		return err
 	}
 
-	am.backgroundMusic = streamer
+	am.battleMusic = streamer
 	am.format = format
 	return nil
 }
 
 func (am *AudioManager) PlayBattleMusic() {
-	if am.backgroundMusic == nil {
+	if am.battleMusic == nil {
 		return
 	}
-	speaker.Play(beep.Loop(-1, am.backgroundMusic))
+	speaker.Play(beep.Loop(-1, am.battleMusic))
 }

@@ -26,6 +26,7 @@ func VisiterForgeron(joueur *Dresseur) {
 		for i, item := range joueur.Inventaire {
 			AfficherLigneMenu(fmt.Sprintf("%d. %s (x%d)", i+1, item.Nom, item.Quantite), largeur)
 		}
+
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("1. Fabriquer un Casque (50 PokéDollars)[Fourrure:2 , Écaille:1]", largeur)
@@ -34,7 +35,7 @@ func VisiterForgeron(joueur *Dresseur) {
 		AfficherLigneMenu("4. Retour au menu principal", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
-		
+
 		fmt.Print(Vert("\nEntrez votre choix (1-4): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
@@ -60,7 +61,7 @@ func VisiterForgeron(joueur *Dresseur) {
 }
 
 func FabriquerEquipement(joueur *Dresseur, nom string, emplacement string) {
-	
+
 	equipements := []Equipment{joueur.Equipement.Tete, joueur.Equipement.Torse, joueur.Equipement.Pieds}
 	for _, equip := range equipements {
 		if equip.Emplacement == emplacement {
