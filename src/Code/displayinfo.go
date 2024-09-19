@@ -2,7 +2,7 @@ package gokemon
 
 import "fmt"
 
-func DisplayInfo(joueur Dresseur) {
+func (joueur Dresseur) DisplayInfo() {
 	fmt.Println(Jaune("\nInformations du dresseur :"))
 	fmt.Printf(Jaune("Nom : %s\n"), joueur.Nom)
 	fmt.Printf(Jaune("Porte-Monnaie : %d PokéDollars\n"), joueur.Argent)

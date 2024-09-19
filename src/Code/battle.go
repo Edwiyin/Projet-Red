@@ -47,11 +47,12 @@ type Item struct {
 	Quantite int
 }
 
-func Combat(joueur *Dresseur) {
+func Combat(joueur *Dresseur, audioManager *AudioManager) {
 	if len(joueur.Equipe) == 0 {
 		fmt.Println(Jaune("\nVous n'avez pas de Pokémon pour combattre. Créez d'abord votre dresseur."))
 		return
 	}
+
 	audioManager.StopMusic()
 	audioManager.PlayBattleMusic()
 	pokemonJoueur := ChoisirPokemon(joueur)
@@ -175,6 +176,7 @@ func Combat(joueur *Dresseur) {
 			case 1:
 				UsePotion(joueur, pokemonJoueur)
 				state = true
+
 			case 2:
 				if UsePoisonPotion(joueur, &ennemi) {
 				}
@@ -249,6 +251,7 @@ func Combat(joueur *Dresseur) {
 		time.Sleep(4 * time.Second)
 	}
 }
+
 func printBattleGround(pokemonJoueurAscii string, pokemonEnnemiAscii string) {
 	splittedPJA := strings.Split(pokemonJoueurAscii, "\n")
 	splittedPEA := strings.Split(pokemonEnnemiAscii, "\n")
@@ -264,9 +267,10 @@ func printBattleGround(pokemonJoueurAscii string, pokemonEnnemiAscii string) {
 		splittedPEA = append(filler, splittedPEA...)
 	}
 	for i := 0; i < maxSize; i++ {
-		fmt.Printf("%50.50s%50.50s%50.50s\n", splittedPJA[i], "", splittedPEA[i])
+		fmt.Printf("%-40s%20s%-40s\n", splittedPJA[i], "", splittedPEA[i])
 	}
 }
+
 func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 	for i, item := range joueur.Inventaire {
 		if item.Nom == "Pokéball" {

@@ -9,7 +9,7 @@ import (
 
 var audioManager *AudioManager
 
-func charCreation() *Dresseur {
+func (joueur *Dresseur) charCreation() {
 	var nom string
 	var nomValide bool
 
@@ -28,14 +28,12 @@ func charCreation() *Dresseur {
 
 		if nomValide && len(nom) > 0 {
 			nom = strings.ToLower(nom)
-			nom = strings.Title(nom)
+			joueur.Nom = nom
 		} else if len(nom) == 0 {
 			nomValide = false
 			fmt.Println(Jaune("Le nom ne peut pas être vide. Veuillez réessayer."))
 		}
 	}
-
-	joueur := &Dresseur{Nom: nom}
 
 	fmt.Print(Vert("Entrez votre choix (1-3) : "))
 	fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
@@ -49,20 +47,22 @@ func charCreation() *Dresseur {
 	joueur.Equipe = append(joueur.Equipe, *pokemon)
 	joueur.Argent = 100
 	fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
-
-	return joueur
 }
 
-func createCharacter(joueur *Dresseur) {
+func (joueur *Dresseur) createCharacter() {
+	joueur.CapaciteInventaire = 10
 	if joueur.Nom == "" {
-		*joueur = *charCreation()
+		joueur.charCreation()
 	} else {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
 	}
+
+	fmt.Println(joueur)
 }
 
-func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
+func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 	audioManager = newAudioManager
+	audioManager.PlayBackgroundMusic()
 	largeur := 155
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
@@ -105,21 +105,22 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 
 		switch choix {
 		case "1":
-			createCharacter(joueur)
+			joueur.createCharacter()
 		case "2":
 			if joueur.Nom == "" {
 				fmt.Println(Jaune("\nVeuillez d'abord créer votre dresseur."))
 			} else {
-				DisplayInfo(*joueur)
+				joueur.DisplayInfo()
 			}
 		case "3":
 			AfficherEquipements(joueur)
 		case "4":
-			AccessInventory(joueur)
+			joueur.AccessInventory()
 		case "5":
-			Combat(joueur)
-			audioManager.StopMusic()
-			audioManager.PlayBackgroundMusic()
+			Combat(joueur ,audioManager)
+			audioManager.StopMusic()	
+			 audioManager.PlayBackgroundMusic()
+
 		case "6":
 			VisiteMarchand(joueur)
 		case "7":
