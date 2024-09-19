@@ -5,11 +5,10 @@ import (
 	"strings"
 )
 
-
 func InitialiserCapaciteInventaire(joueur *Dresseur) {
-    joueur.CapaciteInventaire = LimiteInvInitiale 
-    joueur.NombreAugmentationsInv = 0
-    joueur.Inventaire = make([]InventoryItem, 0, LimiteInvInitiale)
+	joueur.CapaciteInventaire = LimiteInvInitiale
+	joueur.NombreAugmentationsInv = 0
+	joueur.Inventaire = make([]InventoryItem, 0, LimiteInvInitiale)
 }
 
 func upgradeInventorySlot(joueur *Dresseur) {
@@ -17,6 +16,7 @@ func upgradeInventorySlot(joueur *Dresseur) {
 		fmt.Println(Jaune("\nVous avez déjà atteint le nombre maximum d'augmentations d'inventaire."))
 		return
 	}
+	
 	joueur.CapaciteInventaire += AugmentationInv
 	joueur.NombreAugmentationsInv++
 	fmt.Printf(Jaune("\nVotre capacité d'inventaire a été augmentée à %d emplacements.\n"), joueur.CapaciteInventaire)
