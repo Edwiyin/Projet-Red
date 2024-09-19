@@ -118,6 +118,8 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 			AccessInventory(joueur)
 		case "5":
 			Combat(joueur)
+			audioManager.StopMusic()
+			audioManager.PlayBackgroundMusic()
 		case "6":
 			VisiteMarchand(joueur)
 		case "7":
@@ -137,6 +139,3 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		Wrap(func() { fmt.Scanln() })
 	}
 }
-
-
-

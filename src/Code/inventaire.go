@@ -5,11 +5,10 @@ import (
 	"strings"
 )
 
-
 func InitialiserCapaciteInventaire(joueur *Dresseur) {
-    joueur.CapaciteInventaire = LimiteInvInitiale 
-    joueur.NombreAugmentationsInv = 0
-    joueur.Inventaire = make([]InventoryItem, 0, LimiteInvInitiale)
+	joueur.CapaciteInventaire = LimiteInvInitiale
+	joueur.NombreAugmentationsInv = 0
+	joueur.Inventaire = make([]InventoryItem, 0, LimiteInvInitiale)
 }
 
 func upgradeInventorySlot(joueur *Dresseur) {

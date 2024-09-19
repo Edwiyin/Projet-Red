@@ -52,11 +52,12 @@ func Combat(joueur *Dresseur) {
 		fmt.Println(Jaune("\nVous n'avez pas de Pokémon pour combattre. Créez d'abord votre dresseur."))
 		return
 	}
+	audioManager.StopMusic()
+	audioManager.PlayBattleMusic()
 	pokemonJoueur := ChoisirPokemon(joueur)
 	ennemi := GenerateWildPokemon(joueur)
 
-	fmt.Println(PokeArt[ennemi.Nom])
-
+	printBattleGround(PokeArt[pokemonJoueur.Nom], PokeArt[ennemi.Nom])
 	fmt.Printf(Jaune("\nUn %s sauvage de niveau %d apparaît!\n"), ennemi.Nom, ennemi.Niveau)
 	fmt.Printf(Jaune("Vous envoyez %s au combat!\n"), pokemonJoueur.Nom)
 
@@ -226,6 +227,7 @@ func Combat(joueur *Dresseur) {
 		}
 
 	}
+
 	if pokemonJoueur.EstVivant() {
 		expGained := ennemi.Niveau * 20
 		moneyGained := ennemi.Niveau * 50
@@ -235,7 +237,6 @@ func Combat(joueur *Dresseur) {
 		time.Sleep(3 * time.Second)
 		if pokemonJoueur.GainExperience(expGained) {
 			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
-			time.Sleep(3 * time.Second)
 		}
 		ressourceWon := TypeToResource[ennemi.Type]
 		quantiteWon := rand.Intn(3) + 1
@@ -245,10 +246,27 @@ func Combat(joueur *Dresseur) {
 		time.Sleep(3 * time.Second)
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
-		time.Sleep(5 * time.Second)
+		time.Sleep(4 * time.Second)
 	}
 }
-
+func printBattleGround(pokemonJoueurAscii string, pokemonEnnemiAscii string) {
+	splittedPJA := strings.Split(pokemonJoueurAscii, "\n")
+	splittedPEA := strings.Split(pokemonEnnemiAscii, "\n")
+	maxSize := max(len(splittedPJA), len(splittedPEA))
+	minSize := min(len(splittedPJA), len(splittedPEA))
+	filler := make([]string, maxSize-minSize)
+	for i := 0; i < cap(filler); i++ {
+		filler[i] = ""
+	}
+	if len(splittedPJA) < len(splittedPEA) {
+		splittedPJA = append(filler, splittedPJA...)
+	} else if len(splittedPJA) > len(splittedPEA) {
+		splittedPEA = append(filler, splittedPEA...)
+	}
+	for i := 0; i < maxSize; i++ {
+		fmt.Printf("%50.50s%50.50s%50.50s\n", splittedPJA[i], "", splittedPEA[i])
+	}
+}
 func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 	for i, item := range joueur.Inventaire {
 		if item.Nom == "Pokéball" {
