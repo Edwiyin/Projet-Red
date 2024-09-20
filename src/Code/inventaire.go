@@ -17,44 +17,49 @@ func upgradeInventorySlot(joueur *Dresseur) {
 }
 
 func TakePot(item *Item, joueur *Dresseur) {
-    if item.Quantite > 0 {
-        if len(joueur.Equipe) == 1 {
-            healPokemon(&joueur.Equipe[0], item)
-        } else {
-            fmt.Println(Jaune("\nChoisissez le Pokémon à soigner :"))
-            for i, pokemon := range joueur.Equipe {
-                fmt.Printf(Jaune("%d. %s (PV: %d/%d)\n"), i+1, pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
-            }
-            
-            var choix int
-            fmt.Print(Vert("\nEntrez votre choix : "))
-            Wrap(func() { fmt.Scanln(&choix) })
-            
-            if choix > 0 && choix <= len(joueur.Equipe) {
-                healPokemon(&joueur.Equipe[choix-1], item)
-            } else {
-                fmt.Println(Jaune("\nChoix invalide. Aucun Pokémon n'a été soigné."))
-            }
-        }
-    } else {
-        fmt.Println(Jaune("\nVous n'avez plus de Potions."))
-    }
+	if item.Quantite > 0 {
+		if len(joueur.Equipe) == 1 {
+			healPokemon(&joueur.Equipe[0], item)
+		} else {
+			fmt.Println(Jaune("\nChoisissez le Pokémon à soigner :"))
+			for i, pokemon := range joueur.Equipe {
+				fmt.Printf(Jaune("%d. %s (PV: %d/%d)\n"), i+1, pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
+			}
+
+			var choix int
+			fmt.Print(Vert("\nEntrez votre choix : "))
+			Wrap(func() { fmt.Scanln(&choix) })
+
+			if choix > 0 && choix <= len(joueur.Equipe) {
+				healPokemon(&joueur.Equipe[choix-1], item)
+			} else {
+				fmt.Println(Jaune("\nChoix invalide. Aucun Pokémon n'a été soigné."))
+			}
+		}
+	} else {
+		fmt.Println(Jaune("\nVous n'avez plus de Potions."))
+	}
 }
 
 func healPokemon(pokemon *Pokemon, item *Item) {
-    if pokemon.PVActuels < pokemon.PVMax {
-        pokemon.PVActuels += 20
-        if pokemon.PVActuels > pokemon.PVMax {
-            pokemon.PVActuels = pokemon.PVMax
-        }
-        item.Quantite--
-        fmt.Printf(Jaune("\nVous avez utilisé une Potion sur %s. PV actuels: %d/%d\n"), pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
-    } else {
-        fmt.Printf(Jaune("\n%s a déjà ses PV au maximum.\n"), pokemon.Nom)
-    }
+	if pokemon.PVActuels < pokemon.PVMax {
+		pokemon.PVActuels += 20
+		if pokemon.PVActuels > pokemon.PVMax {
+			pokemon.PVActuels = pokemon.PVMax
+		}
+		item.Quantite--
+		fmt.Printf(Jaune("\nVous avez utilisé une Potion sur %s. PV actuels: %d/%d\n"), pokemon.Nom, pokemon.PVActuels, pokemon.PVMax)
+	} else {
+		fmt.Printf(Jaune("\n%s a déjà ses PV au maximum.\n"), pokemon.Nom)
+	}
 }
 
 func AccessInventory(joueur *Dresseur) {
+	joueur.Inventaire = []InventoryItem{
+		{Nom: "Potion de Soin", Quantite: 5},
+		{Nom: "Potion de Poison", Quantite: 1},
+		{Nom: "Pokéball", Quantite: 3},
+	}
 	for {
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")
@@ -86,7 +91,7 @@ func AccessInventory(joueur *Dresseur) {
 			return
 		} else if choix > 0 && choix <= len(joueur.Inventaire) {
 			item := &joueur.Inventaire[choix-1]
-			if item.Nom == "Potion" {
+			if item.Nom == "Potion de Soin" {
 				TakePot((*Item)(item), joueur)
 			} else if item.Nom == "Casque" || item.Nom == "Armure" || item.Nom == "Bottes" {
 				EquiperObjet(joueur, item)

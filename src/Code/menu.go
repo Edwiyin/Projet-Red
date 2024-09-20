@@ -124,7 +124,7 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		case "5":
 			Combat(joueur, false)
 			audioManager.StopMusic()
-			audioManager.PlayBackgroundMusic()
+			audioManager.PlayBattleMusic()
 		case "6":
 			VisiteMarchand(joueur)
 		case "7":

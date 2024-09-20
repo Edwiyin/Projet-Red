@@ -20,10 +20,7 @@ func init() {
 		Equipe:             []gokemon.Pokemon{},
 		Inventaire:         make([]gokemon.InventoryItem, 0, LimiteInvInitiale),
 	}
-
-	joueur.Inventaire = append(joueur.Inventaire, gokemon.InventoryItem{Nom: "Potion de Soin", Quantite: 4})
-	joueur.Inventaire = append(joueur.Inventaire, gokemon.InventoryItem{Nom: "Pokéball", Quantite: 3})
-	joueur.Inventaire = append(joueur.Inventaire, gokemon.InventoryItem{Nom: "Potion de Poison", Quantite: 1})
+	
 
 	audioManager = gokemon.NewAudioManager()
 
@@ -37,7 +34,7 @@ func init() {
 	}
 	err = audioManager.LoadBattleMusic("assets/music/battle.mp3")
 	if err != nil {
-		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
+		fmt.Println("Erreur lors du chargement de l'effet sonore de bataille:", err)
 	}
 }
 func main() {

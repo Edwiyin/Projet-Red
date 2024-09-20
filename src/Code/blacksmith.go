@@ -20,6 +20,8 @@ func VisiterForgeron(joueur *Dresseur) {
 		AfficherLigneMenu("", largeur)
 		AfficherLigneMenu(fmt.Sprintf("  Votre Porte-Monnaie: %d PokéDollars", joueur.Argent), largeur)
 		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu("  Capacité d'inventaire: "+fmt.Sprintf("%d/%d", len(joueur.Inventaire), joueur.CapaciteInventaire), largeur)
+		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("", largeur)
 		AfficherLigneMenu(" Votre inventaire :", largeur)

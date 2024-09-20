@@ -17,6 +17,18 @@ func VisiteMarchand(joueur *Dresseur) {
 		AfficherLigneMenu("                                                           BOUTIQUE DU MARCHAND", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu(fmt.Sprintf("  Votre Porte-Monnaie: %d PokéDollars", joueur.Argent), largeur)
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu("  Capacité d'inventaire: "+fmt.Sprintf("%d/%d", len(joueur.Inventaire), joueur.CapaciteInventaire), largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu(" Votre inventaire :", largeur)
+		for i, item := range joueur.Inventaire {
+			AfficherLigneMenu(fmt.Sprintf("%d. %s (x%d)", i+1, item.Nom, item.Quantite), largeur)
+		}
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
 		AfficherLigneMenu("1. Acheter une Potion de Soin (50 PokéDollars)", largeur)
 		AfficherLigneMenu("2. Acheter une Pokéball (100 PokéDollars)", largeur)
 		AfficherLigneMenu("3. Acheter une Potion de Poison (75 PokéDollars)", largeur)
