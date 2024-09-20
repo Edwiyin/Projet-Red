@@ -7,7 +7,7 @@ import (
 const CapaciteInventaireInitiale = 10
 const LimiteInvInitiale = 10
 const AugmentationInv = 10
-const MaxAugmentationsInv = 5
+const MaxAugmentationsInv = 30
 
 const (
 	Normal   PokemonType = "Normal"
@@ -41,38 +41,38 @@ var SkillName = map[PokemonType][]string{
 
 var SkillDamage = map[PokemonType]map[PokemonType]int{
 	Normal: {
-		Normal: 10,
-		Fire:   5,
-		Water:  5,
-		Grass:  5,
+		Normal:   10,
+		Fire:     5,
+		Water:    5,
+		Grass:    5,
 		Electric: 5,
 	},
 	Fire: {
-		Normal: 10,
-		Fire:   5,
-		Water:  2,
-		Grass:  15,
+		Normal:   10,
+		Fire:     5,
+		Water:    2,
+		Grass:    15,
 		Electric: 10,
 	},
 	Water: {
-		Normal: 10,
-		Fire:   15,
-		Water:  5,
-		Grass:  2,
+		Normal:   10,
+		Fire:     15,
+		Water:    5,
+		Grass:    2,
 		Electric: 5,
 	},
 	Grass: {
-		Normal: 10,
-		Fire:   2,
-		Water:  15,
-		Grass:  5,
+		Normal:   10,
+		Fire:     2,
+		Water:    15,
+		Grass:    5,
 		Electric: 10,
 	},
 	Electric: {
-		Normal: 10,
-		Fire:   10,
-		Water:  15,
-		Grass:  5,
+		Normal:   10,
+		Fire:     10,
+		Water:    15,
+		Grass:    5,
 		Electric: 5,
 	},
 }
@@ -105,14 +105,14 @@ type Dresseur struct {
 		Torse Equipment
 		Pieds Equipment
 	}
-	CapaciteInventaire int
+	CapaciteInventaire     int
 	NombreAugmentationsInv int
 }
 
 type Equipment struct {
-	Nom        string
+	Nom         string
 	Emplacement string
-	BonusPV    int
+	BonusPV     int
 	BonusAttack int
 }
 
@@ -198,51 +198,51 @@ func (d *Dresseur) EquiperEquipement(equipement Equipment) {
 }
 
 type Resource struct {
-    Nom      string
-    Quantite int
+	Nom      string
+	Quantite int
 }
 
 var TypeToResource = map[PokemonType]string{
-    Normal:   "Fourrure",
-    Fire:     "Charbon",
-    Water:    "Écaille",
-    Grass:    "Feuille",
-    Electric: "Batterie",
-    Flying:   "Plume",
-    Bug:      "Carapace",
+	Normal:   "Fourrure",
+	Fire:     "Charbon",
+	Water:    "Écaille",
+	Grass:    "Feuille",
+	Electric: "Batterie",
+	Flying:   "Plume",
+	Bug:      "Carapace",
 }
 
 type CraftingRecipe struct {
-    Nom         string
-    Ressources  map[string]int
-    CoutArgent  int
+	Nom        string
+	Ressources map[string]int
+	CoutArgent int
 }
 
 var CraftingRecipes = map[string]CraftingRecipe{
-    "Casque": {
-        Nom:        "Casque",
-        Ressources: map[string]int{"Fourrure": 2, "Écaille": 1},
-        CoutArgent: 50,
-    },
-    "Armure": {
-        Nom:        "Armure",
-        Ressources: map[string]int{"Écaille": 3, "Charbon": 1},
-        CoutArgent: 50,
-    },
-    "Bottes": {
-        Nom:        "Bottes",
-        Ressources: map[string]int{"Plume": 2, "Carapace": 1},
-        CoutArgent: 50,
-    },
+	"Casque": {
+		Nom:        "Casque",
+		Ressources: map[string]int{"Fourrure": 2, "Écaille": 1},
+		CoutArgent: 50,
+	},
+	"Armure": {
+		Nom:        "Armure",
+		Ressources: map[string]int{"Écaille": 3, "Charbon": 1},
+		CoutArgent: 50,
+	},
+	"Bottes": {
+		Nom:        "Bottes",
+		Ressources: map[string]int{"Plume": 2, "Carapace": 1},
+		CoutArgent: 50,
+	},
 }
 
 func (d *Dresseur) AddResource(resource string, quantite int) {
-    for i, item := range d.Inventaire {
-        if item.Nom == resource {
-            d.Inventaire[i].Quantite += quantite
-            return
-        }
-    }
-   
-    d.Inventaire = append(d.Inventaire, InventoryItem{Nom: resource, Quantite: quantite})
+	for i, item := range d.Inventaire {
+		if item.Nom == resource {
+			d.Inventaire[i].Quantite += quantite
+			return
+		}
+	}
+
+	d.Inventaire = append(d.Inventaire, InventoryItem{Nom: resource, Quantite: quantite})
 }

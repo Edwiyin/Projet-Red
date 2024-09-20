@@ -47,12 +47,11 @@ type Item struct {
 	Quantite int
 }
 
-func Combat(joueur *Dresseur, audioManager *AudioManager) {
+func Combat(joueur *Dresseur, isTraining bool) {
 	if len(joueur.Equipe) == 0 {
 		fmt.Println(Jaune("\nVous n'avez pas de Pokémon pour combattre. Créez d'abord votre dresseur."))
 		return
 	}
-
 	audioManager.StopMusic()
 	audioManager.PlayBattleMusic()
 	pokemonJoueur := ChoisirPokemon(joueur)
@@ -89,22 +88,22 @@ func Combat(joueur *Dresseur, audioManager *AudioManager) {
 			case 1:
 				damage := pokemonJoueur.Attaquer(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 2:
 				damage := pokemonJoueur.Attaquer(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 3:
 				damage := pokemonJoueur.Attaquer(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 4:
 				damage := pokemonJoueur.Attaquer(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 5:
 				fmt.Println(Jaune("Retour au combat..."))
@@ -133,22 +132,22 @@ func Combat(joueur *Dresseur, audioManager *AudioManager) {
 			case 1:
 				damage := pokemonJoueur.AttaqueSpec(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 2:
 				damage := pokemonJoueur.AttaqueSpec(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 3:
 				damage := pokemonJoueur.AttaqueSpec(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 4:
 				damage := pokemonJoueur.AttaqueSpec(&ennemi)
 				fmt.Printf("%s attaque %s et lui inflige %d dégâts!\n", pokemonJoueur.Nom, ennemi.Nom, damage)
-				fmt.Println(Jaune(afficherBarrePV(ennemi)))
+				fmt.Println(Rouge(afficherBarrePV(ennemi)))
 				state = true
 			case 5:
 				fmt.Println(Jaune("Retour au combat..."))
@@ -176,7 +175,6 @@ func Combat(joueur *Dresseur, audioManager *AudioManager) {
 			case 1:
 				UsePotion(joueur, pokemonJoueur)
 				state = true
-
 			case 2:
 				if UsePoisonPotion(joueur, &ennemi) {
 				}
@@ -237,21 +235,23 @@ func Combat(joueur *Dresseur, audioManager *AudioManager) {
 		fmt.Printf(Jaune("Vous avez gagné %d PokéDollars!\n"), moneyGained)
 		joueur.Argent += moneyGained
 		time.Sleep(3 * time.Second)
-		if pokemonJoueur.GainExperience(expGained) {
-			fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
-		}
-		ressourceWon := TypeToResource[ennemi.Type]
-		quantiteWon := rand.Intn(3) + 1
+		if !isTraining {
+			if pokemonJoueur.GainExperience(expGained) {
+				fmt.Printf(Jaune("%s passe au niveau %d!\n"), pokemonJoueur.Nom, pokemonJoueur.Niveau)
+			}
+			ressourceWon := TypeToResource[ennemi.Type]
+			quantiteWon := rand.Intn(3) + 1
 
-		joueur.AddResource(ressourceWon, quantiteWon)
-		fmt.Printf(Jaune("Vous avez gagné %d %s!\n"), quantiteWon, ressourceWon)
+			joueur.AddResource(ressourceWon, quantiteWon)
+			fmt.Printf(Jaune("Vous avez gagné %d %s!\n"), quantiteWon, ressourceWon)
+		}
 		time.Sleep(3 * time.Second)
+
 	} else {
 		fmt.Println(Jaune("Vous avez perdu le combat..."))
 		time.Sleep(4 * time.Second)
 	}
 }
-
 func printBattleGround(pokemonJoueurAscii string, pokemonEnnemiAscii string) {
 	splittedPJA := strings.Split(pokemonJoueurAscii, "\n")
 	splittedPEA := strings.Split(pokemonEnnemiAscii, "\n")
@@ -270,7 +270,6 @@ func printBattleGround(pokemonJoueurAscii string, pokemonEnnemiAscii string) {
 		fmt.Printf("%-40s%20s%-40s\n", splittedPJA[i], "", splittedPEA[i])
 	}
 }
-
 func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 	for i, item := range joueur.Inventaire {
 		if item.Nom == "Pokéball" {

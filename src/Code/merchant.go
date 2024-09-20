@@ -20,7 +20,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		AfficherLigneMenu("1. Acheter une Potion de Soin (50 PokéDollars)", largeur)
 		AfficherLigneMenu("2. Acheter une Pokéball (100 PokéDollars)", largeur)
 		AfficherLigneMenu("3. Acheter une Potion de Poison (75 PokéDollars)", largeur)
-		AfficherLigneMenu("4. Acheter une Augmentation d'inventaire (100 PokéDollars)", largeur)
+		AfficherLigneMenu("4. Acheter une Augmentation d'inventaire (30 PokéDollars)", largeur)
 		AfficherLigneMenu("5. Vendre un objet", largeur)
 		AfficherLigneMenu("6. Vendre un Pokémon", largeur)
 		AfficherLigneMenu("7. Retour au menu principal", largeur)
@@ -38,7 +38,7 @@ func VisiteMarchand(joueur *Dresseur) {
 		case "2":
 			AcheterObjet(joueur, "Pokéball", 100)
 		case "3":
-			AcheterObjet(joueur, "Potion de Poison", 150)
+			AcheterObjet(joueur, "Potion de Poison", 75)
 		case "4":
 			AcheterAugmentationInventaire(joueur)
 		case "5":
@@ -141,7 +141,7 @@ func VendrePokemon(joueur *Dresseur) {
 
 func GetPrixVente(nomObjet string) int {
 	switch nomObjet {
-	case "Potion de Soin":
+	case "Potion":
 		return 25
 	case "Pokéball":
 		return 50
@@ -153,19 +153,19 @@ func GetPrixVente(nomObjet string) int {
 }
 
 func AcheterAugmentationInventaire(joueur *Dresseur) {
-	if joueur.Argent < 100 {
+	if joueur.Argent < 30 {
 		fmt.Println(Jaune("\nVous n'avez pas assez d'argent pour acheter une Augmentation d'inventaire."))
 		return
 	}
 
-	if joueur.NombreAugmentationsInv >= MaxAugmentationsInv {
+	if joueur.CapaciteInventaire >= MaxAugmentationsInv {
 		fmt.Println(Jaune("\nVous avez déjà atteint le nombre maximum d'augmentations d'inventaire."))
 		return
 	}
 
-	joueur.Argent -= 100
+	joueur.Argent -= 30
 	upgradeInventorySlot(joueur)
-	fmt.Println(Jaune("\nVous avez acheté une Augmentation d'inventaire pour 100 PokéDollars."))
+	fmt.Println(Jaune("\nVous avez acheté une Augmentation d'inventaire pour 30 PokéDollars."))
 }
 
 func ajouterObjetInventaire(joueur *Dresseur, nomObjet string, quantite int) {

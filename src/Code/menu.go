@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 	"unicode"
 )
 
 var audioManager *AudioManager
 
-func (joueur *Dresseur) charCreation() {
+func charCreation() *Dresseur {
 	var nom string
 	var nomValide bool
 
@@ -27,13 +28,15 @@ func (joueur *Dresseur) charCreation() {
 		}
 
 		if nomValide && len(nom) > 0 {
-			nom = Capitalize(nom)
-			joueur.Nom = nom
+			nom = strings.ToLower(nom)
+			nom = strings.Title(nom)
 		} else if len(nom) == 0 {
 			nomValide = false
 			fmt.Println(Jaune("Le nom ne peut pas être vide. Veuillez réessayer."))
 		}
 	}
+
+	joueur := &Dresseur{Nom: nom}
 
 	fmt.Print(Vert("Entrez votre choix (1-3) : "))
 	fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
@@ -47,21 +50,20 @@ func (joueur *Dresseur) charCreation() {
 	joueur.Equipe = append(joueur.Equipe, *pokemon)
 	joueur.Argent = 100
 	fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
+	InitialiserCapaciteInventaire(joueur)
+	return joueur
 }
 
-func (joueur *Dresseur) createCharacter() {
-	joueur.CapaciteInventaire = 10
+func createCharacter(joueur *Dresseur) {
 	if joueur.Nom == "" {
-		joueur.charCreation()
+		*joueur = *charCreation()
 	} else {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
 	}
-
 }
 
-func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
+func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 	audioManager = newAudioManager
-	audioManager.PlayBackgroundMusic()
 	largeur := 155
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
@@ -72,9 +74,11 @@ func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 	AfficherLigneMenu("                                                                  NEW GAME", largeur)
 	AfficherLigneMenu("", largeur)
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
+	fmt.Println(PokeArt["Laggron"])
+	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
 
-	MessageRapide(("Appuyez sur Entrée pour commencer..."), 3, "vert")
 	Wrap(func() { fmt.Scanln() })
+
 	for {
 		largeur := 155
 		fmt.Print("\033[2J")
@@ -93,42 +97,49 @@ func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 		AfficherLigneMenu("5. Combatre un Pokémon Sauvage", largeur)
 		AfficherLigneMenu("6. Visiter le Marchand", largeur)
 		AfficherLigneMenu("7. Visiter le Forgeron", largeur)
-		AfficherLigneMenu("8. Qui sont-ils", largeur)
-		AfficherLigneMenu("9. Quitter le Jeu", largeur)
+		AfficherLigneMenu("8. Entraînement", largeur)
+		AfficherLigneMenu("9. Qui sont-ils", largeur)
+		AfficherLigneMenu("10. Quitter le Jeu", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Print(Vert("\nEntrez votre choix (1-9): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-10): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
 
 		switch choix {
 		case "1":
-			joueur.createCharacter()
+			createCharacter(joueur)
+
 		case "2":
 			if joueur.Nom == "" {
 				fmt.Println(Jaune("\nVeuillez d'abord créer votre dresseur."))
 			} else {
-			DisplayInfo(joueur)
+				DisplayInfo(joueur)
 			}
 		case "3":
 			AfficherEquipements(joueur)
 		case "4":
-			joueur.AccessInventory()
+			AccessInventory(joueur)
 		case "5":
-			Combat(joueur, audioManager)
+			Combat(joueur, false)
 			audioManager.StopMusic()
 			audioManager.PlayBackgroundMusic()
-
 		case "6":
 			VisiteMarchand(joueur)
 		case "7":
 			VisiterForgeron(joueur)
 		case "8":
-			MessageRapide(("Abba"), 3, "bleu")
-			MessageRapide(("Steven Spielberg"), 3, "bleu")
-			MessageRapide(("Les développeurs de ce jeu sont: Massinissa Ahfir, Edwin Wehbe, Michel Mustafaov"), 3, "bleu")
+			trainigFight(joueur)
+			audioManager.StopMusic()
+			audioManager.PlayBackgroundMusic()
 		case "9":
+			MessageRapide(("Abba"), 40, "bleu")
+			time.Sleep(1 * time.Second)
+			MessageRapide(("Steven Spielberg"), 40, "bleu")
+			time.Sleep(1 * time.Second)
+			MessageRapide(("Les développeurs de ce jeu sont: Massinissa Ahfir, Edwin Wehbe, Michel Mustafaov"), 40, "bleu")
+		case "10":
 			fmt.Println(Jaune("\nMerci d'avoir joué. Au revoir!"))
 			os.Exit(0)
 		default:

@@ -12,7 +12,7 @@ const LimiteInvInitiale = 10
 var joueur gokemon.Dresseur
 var audioManager *gokemon.AudioManager
 
-func Init() {
+func init() {
 	joueur = gokemon.Dresseur{
 		Nom:                "",
 		Argent:             0,
@@ -26,30 +26,25 @@ func Init() {
 	joueur.Inventaire = append(joueur.Inventaire, gokemon.InventoryItem{Nom: "Potion de Poison", Quantite: 1})
 
 	audioManager = gokemon.NewAudioManager()
-	audioManager.StopMusic()
 
-	err := audioManager.Initialize()
-	if err != nil {
-		fmt.Println("Erreur lors de l'initialisation de l'audio:", err)
-		return
-	}
-
-	err = audioManager.LoadBackgroundMusic("assets/music/titlescreen1.mp3")
+	err := audioManager.LoadBackgroundMusic("assets/music/titlescreen1.mp3")
 	if err != nil {
 		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
 	}
-
 	err = audioManager.LoadSoundEffect("select", "assets/music/select1.mp3")
 	if err != nil {
-		fmt.Println("Erreur lors du chargement de l'effet sonore:", err)
+		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
 	}
-
+	err = audioManager.LoadBattleMusic("assets/music/battle.mp3")
+	if err != nil {
+		fmt.Println("Erreur lors du chargement de la musique de fond:", err)
+	}
 }
-
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	Init()
-	/*audioManager.PlayBackgroundMusic()*/
-	joueur.MenuPrincipal(audioManager)
+	audioManager.PlayBackgroundMusic()
+
+	gokemon.MenuPrincipal(&joueur, audioManager)
+
 }
