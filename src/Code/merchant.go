@@ -3,7 +3,6 @@ package gokemon
 import (
 	"fmt"
 	"strings"
-
 )
 
 func VisiteMarchand(joueur *Dresseur) {
@@ -18,13 +17,13 @@ func VisiteMarchand(joueur *Dresseur) {
 		AfficherLigneMenu("                                                           BOUTIQUE DU MARCHAND", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
-		AfficherLigneMenu("1. Acheter une Potion (50 PokéDollars)", largeur)
+		AfficherLigneMenu("1. Acheter une Potion de Soin (50 PokéDollars)", largeur)
 		AfficherLigneMenu("2. Acheter une Pokéball (100 PokéDollars)", largeur)
 		AfficherLigneMenu("3. Acheter une Potion de Poison (75 PokéDollars)", largeur)
-		AfficherLigneMenu("4. Acheter une Augmentation d'inventaire (100 PokéDollars)", largeur)
+		AfficherLigneMenu("4. Acheter une Augmentation d'inventaire (30 PokéDollars)", largeur)
 		AfficherLigneMenu("5. Vendre un objet", largeur)
 		AfficherLigneMenu("6. Vendre un Pokémon", largeur)
-        AfficherLigneMenu("7. Retour au menu principal", largeur)
+		AfficherLigneMenu("7. Retour au menu principal", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
@@ -35,16 +34,16 @@ func VisiteMarchand(joueur *Dresseur) {
 
 		switch choix {
 		case "1":
-			AcheterObjet(joueur, "Potion", 50)
+			AcheterObjet(joueur, "Potion de Soin", 50)
 		case "2":
 			AcheterObjet(joueur, "Pokéball", 100)
 		case "3":
-			AcheterObjet(joueur, "Potion de Poison", 150)
+			AcheterObjet(joueur, "Potion de Poison", 75)
 		case "4":
 			AcheterAugmentationInventaire(joueur)
 		case "5":
 			VendreObjet(joueur)
-	    case "6":
+		case "6":
 			VendrePokemon(joueur)
 		case "7":
 			return
@@ -58,29 +57,29 @@ func VisiteMarchand(joueur *Dresseur) {
 }
 
 func AcheterObjet(joueur *Dresseur, nomObjet string, prix int) {
-    if joueur.Argent >= prix {
-        totalItems := 0
-        for _, item := range joueur.Inventaire {
-            totalItems += item.Quantite
-        }
+	if joueur.Argent >= prix {
+		totalItems := 0
+		for _, item := range joueur.Inventaire {
+			totalItems += item.Quantite
+		}
 		if totalItems >= joueur.CapaciteInventaire {
 			fmt.Println(Jaune("\nVotre inventaire est plein. Vous ne pouvez pas acheter plus d'objets."))
 			return
 		}
-        
-        joueur.Argent -= prix
-        for i := range joueur.Inventaire {
-            if joueur.Inventaire[i].Nom == nomObjet {
-                joueur.Inventaire[i].Quantite++
-                fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
-                return
-            }
-        }
+
+		joueur.Argent -= prix
+		for i := range joueur.Inventaire {
+			if joueur.Inventaire[i].Nom == nomObjet {
+				joueur.Inventaire[i].Quantite++
+				fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
+				return
+			}
+		}
 		ajouterObjetInventaire(joueur, nomObjet, 1)
-        fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
-    } else {
-        fmt.Println(Jaune("\nVous n'avez pas assez d'argent pour acheter cet objet."))
-    }
+		fmt.Printf(Jaune("\nVous avez acheté un(e) %s pour %d PokéDollars.\n"), nomObjet, prix)
+	} else {
+		fmt.Println(Jaune("\nVous n'avez pas assez d'argent pour acheter cet objet."))
+	}
 }
 
 func VendreObjet(joueur *Dresseur) {
@@ -113,31 +112,31 @@ func VendreObjet(joueur *Dresseur) {
 }
 
 func VendrePokemon(joueur *Dresseur) {
-    if len(joueur.Equipe) <= 1 {
-        fmt.Println(Jaune("\nVous ne pouvez pas vendre votre dernier Pokémon !"))
-        return
-    }
+	if len(joueur.Equipe) <= 1 {
+		fmt.Println(Jaune("\nVous ne pouvez pas vendre votre dernier Pokémon !"))
+		return
+	}
 
-    fmt.Println(Jaune("\nQuels Pokémon voulez-vous vendre ?"))
-    for i, pokemon := range joueur.Equipe {
-        prix := pokemon.Niveau * 100
-        fmt.Printf(Jaune("%d. %s (Niveau %d) - Prix de vente: %d PokéDollars\n"), i+1, pokemon.Nom, pokemon.Niveau, prix)
-    }
-    fmt.Printf(Jaune("%d. Annuler\n"), len(joueur.Equipe)+1)
+	fmt.Println(Jaune("\nQuels Pokémon voulez-vous vendre ?"))
+	for i, pokemon := range joueur.Equipe {
+		prix := pokemon.Niveau * 100
+		fmt.Printf(Jaune("%d. %s (Niveau %d) - Prix de vente: %d PokéDollars\n"), i+1, pokemon.Nom, pokemon.Niveau, prix)
+	}
+	fmt.Printf(Jaune("%d. Annuler\n"), len(joueur.Equipe)+1)
 
-    var choix int
-    fmt.Print(Vert("\nEntrez votre choix : "))
-    Wrap(func() { fmt.Scanln(&choix) })
+	var choix int
+	fmt.Print(Vert("\nEntrez votre choix : "))
+	Wrap(func() { fmt.Scanln(&choix) })
 
-    if choix > 0 && choix < len(joueur.Equipe)+1 {
-        pokemonVendu := joueur.Equipe[choix-1]
-        prixVente := pokemonVendu.Niveau * 100
-        joueur.Argent += prixVente
-        joueur.Equipe = append(joueur.Equipe[:choix-1], joueur.Equipe[choix:]...)
-        fmt.Printf(Jaune("\nVous avez vendu %s pour %d PokéDollars.\n"), pokemonVendu.Nom, prixVente)
-    } else if choix != len(joueur.Equipe)+1 {
-        fmt.Println(Jaune("\nChoix invalide."))
-    }
+	if choix > 0 && choix < len(joueur.Equipe)+1 {
+		pokemonVendu := joueur.Equipe[choix-1]
+		prixVente := pokemonVendu.Niveau * 100
+		joueur.Argent += prixVente
+		joueur.Equipe = append(joueur.Equipe[:choix-1], joueur.Equipe[choix:]...)
+		fmt.Printf(Jaune("\nVous avez vendu %s pour %d PokéDollars.\n"), pokemonVendu.Nom, prixVente)
+	} else if choix != len(joueur.Equipe)+1 {
+		fmt.Println(Jaune("\nChoix invalide."))
+	}
 }
 
 func GetPrixVente(nomObjet string) int {
@@ -159,7 +158,7 @@ func AcheterAugmentationInventaire(joueur *Dresseur) {
 		return
 	}
 
-	if joueur.NombreAugmentationsInv >= MaxAugmentationsInv {
+	if joueur.CapaciteInventaire >= MaxAugmentationsInv {
 		fmt.Println(Jaune("\nVous avez déjà atteint le nombre maximum d'augmentations d'inventaire."))
 		return
 	}
