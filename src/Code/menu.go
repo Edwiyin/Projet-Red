@@ -62,8 +62,7 @@ func createCharacter(joueur *Dresseur) {
 	}
 }
 
-func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
-	audioManager = newAudioManager
+func Titre () {
 	largeur := 155
 	fmt.Print("\033[2J")
 	fmt.Print("\033[H")
@@ -75,8 +74,12 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 	AfficherLigneMenu("", largeur)
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 	fmt.Println(PokeArt["Laggron"])
-	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
+	MessageRapide("\nAppuyez sur Entrée pour commencer...", 40, "vert")
+	Wrap(func() { fmt.Scanln() })
+}
 
+func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
+	audioManager = newAudioManager
 	Wrap(func() { fmt.Scanln() })
 
 	for {
@@ -94,22 +97,26 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		AfficherLigneMenu("2. Afficher les informations du dresseur", largeur)
 		AfficherLigneMenu("3. Afficher les équipements", largeur)
 		AfficherLigneMenu("4. Accéder à l'inventaire  ", largeur)
-		AfficherLigneMenu("5. Combatre un Pokémon Sauvage", largeur)
+		AfficherLigneMenu("5. Combat", largeur)
 		AfficherLigneMenu("6. Visiter le Marchand", largeur)
 		AfficherLigneMenu("7. Visiter le Forgeron", largeur)
-		AfficherLigneMenu("8. Entraînement", largeur)
-		AfficherLigneMenu("9. Qui sont-ils", largeur)
-		AfficherLigneMenu("10. Quitter le Jeu", largeur)
+		AfficherLigneMenu("8. Qui sont-ils", largeur)
+		AfficherLigneMenu("9. Quitter le Jeu", largeur)
 		AfficherLigneMenu("", largeur)
 		fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-		fmt.Print(Vert("\nEntrez votre choix (1-10): "))
+		fmt.Print(Vert("\nEntrez votre choix (1-9): "))
 		var choix string
 		Wrap(func() { fmt.Scanln(&choix) })
 
 		switch choix {
 		case "1":
 			createCharacter(joueur)
+			joueur.Inventaire = []InventoryItem{
+				{Nom: "Potion de Soin", Quantite: 5},
+				{Nom: "Potion de Poison", Quantite: 1},
+				{Nom: "Pokéball", Quantite: 3},
+			}
 
 		case "2":
 			if joueur.Nom == "" {
@@ -122,24 +129,41 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 		case "4":
 			AccessInventory(joueur)
 		case "5":
-			Combat(joueur, false)
+			
+			fmt.Println(Jaune("Choisissez votre option:"))
+			fmt.Println(Jaune("1. Combat contre un Pokémon Sauvage"))
+			fmt.Println(Jaune("2. Entraînement"))
+			fmt.Println(Jaune("3. Retour au menu principal"))
+
+
+			switch choix{
+			case "1":
+				Combat(joueur, false)
 			audioManager.StopMusic()
 			audioManager.PlayBattleMusic()
+			case "2":
+				trainigFight(joueur)
+			audioManager.StopMusic()
+			audioManager.PlayBackgroundMusic()
+
+            case "3":
+				break
+
+
+			}
+			
 		case "6":
 			VisiteMarchand(joueur)
 		case "7":
 			VisiterForgeron(joueur)
+			
 		case "8":
-			trainigFight(joueur)
-			audioManager.StopMusic()
-			audioManager.PlayBackgroundMusic()
-		case "9":
 			MessageRapide(("Abba"), 40, "bleu")
 			time.Sleep(1 * time.Second)
 			MessageRapide(("Steven Spielberg"), 40, "bleu")
 			time.Sleep(1 * time.Second)
 			MessageRapide(("Les développeurs de ce jeu sont: Massinissa Ahfir, Edwin Wehbe, Michel Mustafaov"), 40, "bleu")
-		case "10":
+		case "9":
 			fmt.Println(Jaune("\nMerci d'avoir joué. Au revoir!"))
 			os.Exit(0)
 		default:

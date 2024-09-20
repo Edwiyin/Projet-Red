@@ -44,7 +44,6 @@ func GenerateWildPokemon(joueur *Dresseur) Pokemon {
 		{"Mewtwo", Electric},
 		{"Ronflex", Normal},
 		{"Torterra", Grass},
-		{"Laggron", Fire},
 		{"Typhlosion", Fire},
 		{"Roucool", Normal},
 		{"Akwakwak", Water},

@@ -30,7 +30,5 @@ func AfficherEquipements(joueur *Dresseur) {
 	}
 	AfficherLigneMenu("", largeur)
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
-
-	fmt.Print(Vert("\nAppuyez sur Entrée pour revenir au menu principal..."))
 	Wrap(func() { fmt.Scanln() })
 }

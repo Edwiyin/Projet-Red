@@ -55,11 +55,7 @@ func healPokemon(pokemon *Pokemon, item *Item) {
 }
 
 func AccessInventory(joueur *Dresseur) {
-	joueur.Inventaire = []InventoryItem{
-		{Nom: "Potion de Soin", Quantite: 5},
-		{Nom: "Potion de Poison", Quantite: 1},
-		{Nom: "Pokéball", Quantite: 3},
-	}
+	
 	for {
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")

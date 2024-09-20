@@ -20,7 +20,6 @@ func init() {
 		Equipe:             []gokemon.Pokemon{},
 		Inventaire:         make([]gokemon.InventoryItem, 0, LimiteInvInitiale),
 	}
-	
 
 	audioManager = gokemon.NewAudioManager()
 
@@ -39,9 +38,9 @@ func init() {
 }
 func main() {
 	rand.Seed(time.Now().UnixNano())
-
 	audioManager.PlayBackgroundMusic()
-
+	gokemon.Titre()
+	gokemon.AfficherDialogueProfChen()
 	gokemon.MenuPrincipal(&joueur, audioManager)
 
 }

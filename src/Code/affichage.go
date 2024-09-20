@@ -37,6 +37,23 @@ func AfficherTitre() {
 						╚██████╔╝╚██████╔╝██║  ██╗███████╗██║ ╚═╝ ██║╚██████╔╝██║ ╚████║
  						╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝     ╚═╝ ╚═════╝ ╚═╝  ╚═══╝`
 	fmt.Println(Rouge(titre))
+
+}
+
+func AfficherDialogueProfChen() {
+    largeur := 80
+    AfficherCadre(largeur)
+	MessageRapide("Professeur Chen: Bienvenue dans le monde des Pokémon!", 50, "bleu")
+    MessageRapide("Je suis le Professeur Chen, mais tout le monde m'appelle le Professeur Pokémon.", 50, "bleu")
+    MessageRapide("Ce monde est peuplé de créatures appelées Pokémon!",	50, "bleu")
+    MessageRapide("Pour certains, les Pokémon sont des animaux de compagnie.",	50, "bleu")
+    MessageRapide("Pour d'autres, ils sont un moyen de combattre.",	50, "bleu")
+    MessageRapide("Quant à moi, l'étude des Pokémon est ma profession.",50, "bleu")
+	MessageRapide("Mais d'abord,créez votre dresseur", 50, "bleu")
+    AfficherCadre(largeur)
+    fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
+    var input string
+    fmt.Scanln(&input)
 }
 
 func AfficherCadre(largeur int) {
