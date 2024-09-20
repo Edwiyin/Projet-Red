@@ -27,7 +27,7 @@ func (joueur *Dresseur) charCreation() {
 		}
 
 		if nomValide && len(nom) > 0 {
-			nom = strings.ToLower(nom)
+			nom = Capitalize(nom)
 			joueur.Nom = nom
 		} else if len(nom) == 0 {
 			nomValide = false
@@ -57,7 +57,6 @@ func (joueur *Dresseur) createCharacter() {
 		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
 	}
 
-	fmt.Println(joueur)
 }
 
 func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
@@ -74,7 +73,7 @@ func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 	AfficherLigneMenu("", largeur)
 	fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
 
-	fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
+	MessageRapide(("Appuyez sur Entrée pour commencer..."), 3, "vert")
 	Wrap(func() { fmt.Scanln() })
 	for {
 		largeur := 155
@@ -110,16 +109,16 @@ func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 			if joueur.Nom == "" {
 				fmt.Println(Jaune("\nVeuillez d'abord créer votre dresseur."))
 			} else {
-				joueur.DisplayInfo()
+			DisplayInfo(joueur)
 			}
 		case "3":
 			AfficherEquipements(joueur)
 		case "4":
 			joueur.AccessInventory()
 		case "5":
-			Combat(joueur ,audioManager)
-			audioManager.StopMusic()	
-			 audioManager.PlayBackgroundMusic()
+			Combat(joueur, audioManager)
+			audioManager.StopMusic()
+			audioManager.PlayBackgroundMusic()
 
 		case "6":
 			VisiteMarchand(joueur)
@@ -139,4 +138,23 @@ func (joueur *Dresseur) MenuPrincipal(newAudioManager *AudioManager) {
 		fmt.Print(Vert("\nAppuyez sur Entrée pour continuer..."))
 		Wrap(func() { fmt.Scanln() })
 	}
+}
+
+func Capitalize(s string) string {
+	slice := []rune(s)
+	if slice[0] >= 'a' && slice[0] <= 'z' {
+		slice[0] = slice[0] - 32
+	}
+	for i := 1; i < len(slice); i++ {
+		if slice[i] >= 'A' && slice[i] <= 'Z' {
+			if (slice[i-1] >= 'a' && slice[i-1] <= 'z') || (slice[i-1] >= 'A' && slice[i-1] <= 'Z') || (slice[i-1] >= '0' && slice[i-1] <= '9') {
+				slice[i] = slice[i] + 32
+			}
+		} else if slice[i] >= 'a' && slice[i] <= 'z' {
+			if (slice[i-1] < 'a' || slice[i-1] > 'z') && (slice[i-1] < 'A' || slice[i-1] > 'Z') && (slice[i-1] < '0' || slice[i-1] > '9') {
+				slice[i] = slice[i] - 32
+			}
+		}
+	}
+	return string(slice)
 }

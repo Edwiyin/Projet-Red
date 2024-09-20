@@ -96,26 +96,6 @@ func (am *AudioManager) PlaySoundEffect(name string) {
 		speaker.Play(buffer.Streamer(0, buffer.Len()))
 	}
 }
-func (am *AudioManager) LoadBattleMusic(assets string) error {
-	if err := am.Initialize(); err != nil {
-		return err
-	}
-
-	f, err := os.Open(assets)
-	if err != nil {
-		return err
-	}
-
-	streamer, format, err := mp3.Decode(f)
-	if err != nil {
-		f.Close()
-		return err
-	}
-
-	am.backgroundMusic = streamer
-	am.format = format
-	return nil
-}
 
 func (am *AudioManager) PlayBattleMusic() {
 	if am.backgroundMusic == nil {

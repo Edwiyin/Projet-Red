@@ -280,7 +280,7 @@ func TryToCatch(joueur *Dresseur, pokemon *Pokemon) bool {
 				fmt.Printf(Jaune("\nVous lancez une Pokéball... Chance de capture : %.2f\n"), catchChance)
 				if rand.Float64() < catchChance {
 					joueur.Equipe = append(joueur.Equipe, *pokemon)
-					fmt.Printf(Jaune("\nFélicitations! Vous avez capturé %s!\n"), pokemon.Nom)
+					MessageRapide(fmt.Sprintf("Félicitations! Vous avez capturé %s!", pokemon.Nom), 1, "success")
 					time.Sleep(4 * time.Second)
 					return true
 				} else {

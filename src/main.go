@@ -44,16 +44,12 @@ func Init() {
 		fmt.Println("Erreur lors du chargement de l'effet sonore:", err)
 	}
 
-	err = audioManager.LoadBattleMusic("assets/music/battle.mp3")
-	if err != nil {
-		fmt.Println("Erreur lors du chargement de la musique de bataille:", err)
-	}
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
 	Init()
-	audioManager.PlayBackgroundMusic()
+	/*audioManager.PlayBackgroundMusic()*/
 	joueur.MenuPrincipal(audioManager)
 }
