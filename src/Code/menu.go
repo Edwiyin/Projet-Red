@@ -115,7 +115,7 @@ func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
 			if joueur.Nom == "" {
 				fmt.Println(Jaune("\nVeuillez d'abord créer votre dresseur."))
 			} else {
-				DisplayInfo(*joueur)
+				DisplayInfo(joueur)
 			}
 		case "3":
 			AfficherEquipements(joueur)
