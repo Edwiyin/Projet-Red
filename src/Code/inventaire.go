@@ -56,6 +56,10 @@ func healPokemon(pokemon *Pokemon, item *Item) {
 
 func AccessInventory(joueur *Dresseur) {
 	
+	joueur.Inventaire = append(joueur.Inventaire, InventoryItem{Nom: "Potion de Soin", Quantite: 4})
+	joueur.Inventaire = append(joueur.Inventaire, InventoryItem{Nom: "Pokéball", Quantite: 3})
+	joueur.Inventaire = append(joueur.Inventaire, InventoryItem{Nom: "Potion de Poison", Quantite: 1})
+
 	for {
 		fmt.Print("\033[2J")
 		fmt.Print("\033[H")

@@ -1,65 +1,65 @@
 package gokemon
 
 import (
-    "fmt"
-    "os"
-    "strings"
-    "time"
-    "unicode"
+	"fmt"
+	"os"
+	"strings"
+	"time"
+	"unicode"
 )
 
 var audioManager *AudioManager
 
 func charCreation() *Dresseur {
-    var nom string
-    var nomValide bool
+	var nom string
+	var nomValide bool
 
-    for !nomValide {
-        fmt.Print(Vert("Entrez votre nom de dresseur (lettres uniquement) : "))
-        Wrap(func() { fmt.Scanln(&nom) })
+	for !nomValide {
+		fmt.Print(Vert("Entrez votre nom de dresseur (lettres uniquement) : "))
+		Wrap(func() { fmt.Scanln(&nom) })
 
-        nomValide = true
-        for _, char := range nom {
-            if !unicode.IsLetter(char) {
-                nomValide = false
-                fmt.Println(Jaune("Le nom doit contenir uniquement des lettres. Veuillez réessayer."))
-                break
-            }
-        }
+		nomValide = true
+		for _, char := range nom {
+			if !unicode.IsLetter(char) {
+				nomValide = false
+				fmt.Println(Jaune("Le nom doit contenir uniquement des lettres. Veuillez réessayer."))
+				break
+			}
+		}
 
-        if nomValide && len(nom) > 0 {
-            nom = strings.ToLower(nom)
-            nom = strings.Title(nom)
-        } else if len(nom) == 0 {
-            nomValide = false
-            fmt.Println(Jaune("Le nom ne peut pas être vide. Veuillez réessayer."))
-        }
-    }
+		if nomValide && len(nom) > 0 {
+			nom = strings.ToLower(nom)
+			nom = strings.Title(nom)
+		} else if len(nom) == 0 {
+			nomValide = false
+			fmt.Println(Jaune("Le nom ne peut pas être vide. Veuillez réessayer."))
+		}
+	}
 
-    joueur := &Dresseur{Nom: nom}
+	joueur := &Dresseur{Nom: nom}
 
-    fmt.Print(Vert("Entrez votre choix (1-3) : "))
-    fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
-    fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
-    fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
-    fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
-    var choixPokemon string
-    Wrap(func() { fmt.Scanln(&choixPokemon) })
+	fmt.Print(Vert("Entrez votre choix (1-3) : "))
+	fmt.Println(Jaune("\nChoisissez votre Pokémon de départ :"))
+	fmt.Println(Jaune("1. Bulbizarre (Type: Plante)"))
+	fmt.Println(Jaune("2. Salamèche (Type: Feu)"))
+	fmt.Println(Jaune("3. Carapuce (Type: Eau)"))
+	var choixPokemon string
+	Wrap(func() { fmt.Scanln(&choixPokemon) })
 
-    pokemon := choixPokemonFunc(choixPokemon)
-    joueur.Equipe = append(joueur.Equipe, *pokemon)
-    joueur.Argent = 100
-    fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
-    InitialiserCapaciteInventaire(joueur)
-    return joueur
+	pokemon := choixPokemonFunc(choixPokemon)
+	joueur.Equipe = append(joueur.Equipe, *pokemon)
+	joueur.Argent = 100
+	fmt.Printf(Jaune("Félicitations, %s ! Vous avez choisi %s comme Pokémon de départ!\n"), joueur.Nom, pokemon.Nom)
+	InitialiserCapaciteInventaire(joueur)
+	return joueur
 }
 
 func createCharacter(joueur *Dresseur) {
-    if joueur.Nom == "" {
-        *joueur = *charCreation()
-    } else {
-        fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
-    }
+	if joueur.Nom == "" {
+		*joueur = *charCreation()
+	} else {
+		fmt.Println(Jaune("Vous avez déjà créé votre dresseur."))
+	}
 }
 
 func Titre () {
@@ -79,37 +79,24 @@ func Titre () {
 }
 
 func MenuPrincipal(joueur *Dresseur, newAudioManager *AudioManager) {
-    audioManager = newAudioManager
-    largeur := 155
-    fmt.Print("\033[2J")
-    fmt.Print("\033[H")
-    AfficherTitre()
+	audioManager = newAudioManager
+	Wrap(func() { fmt.Scanln() })
 
-    fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
-    AfficherLigneMenu("", largeur)
-    AfficherLigneMenu("                                                                  NEW GAME", largeur)
-    AfficherLigneMenu("", largeur)
-    fmt.Println(Jaune("╚" + strings.Repeat("═", largeur-2) + "╝"))
-    fmt.Println(PokeArt["Laggron"])
-    fmt.Print(Vert("\nAppuyez sur Entrée pour commencer..."))
+	for {
+		largeur := 155
+		fmt.Print("\033[2J")
+		fmt.Print("\033[H")
+		AfficherTitre()
 
-    Wrap(func() { fmt.Scanln() })
-
-    for {
-        largeur := 155
-        fmt.Print("\033[2J")
-        fmt.Print("\033[H")
-        AfficherTitre()
-
-        fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
-        AfficherLigneMenu("", largeur)
-        AfficherLigneMenu("                                                              MENU PRINCIPAL", largeur)
-        AfficherLigneMenu("", largeur)
-        fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
-        AfficherLigneMenu("1. Créer Dresseur  ", largeur)
-        AfficherLigneMenu("2. Afficher les informations du dresseur", largeur)
-        AfficherLigneMenu("3. Afficher les équipements", largeur)
-        AfficherLigneMenu("4. Accéder à l'inventaire  ", largeur)
+		fmt.Println(Jaune("╔" + strings.Repeat("═", largeur-2) + "╗"))
+		AfficherLigneMenu("", largeur)
+		AfficherLigneMenu("                                                              MENU PRINCIPAL", largeur)
+		AfficherLigneMenu("", largeur)
+		fmt.Println(Jaune("╠" + strings.Repeat("═", largeur-2) + "╣"))
+		AfficherLigneMenu("1. Créer Dresseur  ", largeur)
+		AfficherLigneMenu("2. Afficher les informations du dresseur", largeur)
+		AfficherLigneMenu("3. Afficher les équipements", largeur)
+		AfficherLigneMenu("4. Accéder à l'inventaire  ", largeur)
         AfficherLigneMenu("5. Combatre un Pokémon Sauvage", largeur)
         AfficherLigneMenu("6. Visiter le Marchand", largeur)
         AfficherLigneMenu("7. Visiter le Forgeron", largeur)

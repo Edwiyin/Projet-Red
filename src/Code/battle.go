@@ -206,6 +206,7 @@ func Combat(joueur *Dresseur, isTraining bool) {
 			}
 		case 6:
 			fmt.Println(Jaune("Vous avez fui le combat!"))
+			audioManager.StopMusic()
 			time.Sleep(3 * time.Second)
 			return
 		default:
